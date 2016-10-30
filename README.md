@@ -1,5 +1,8 @@
 [![Build Status](https://travis-ci.org/genomematt/survivalvolume.svg?branch=master)](https://travis-ci.org/genomematt/survivalvolume)
 # SurvivalVolume
+v1.0.0
+Matthew Wakefield
+
 A set of tools for parsing measurement with threshold over time data (eg tyre wear, tumour treatment studies) and generating interactive and static plots.
 
 # Installation
@@ -53,7 +56,7 @@ Worked examples of how to use survivalvolume are provided in the user guide
 Github will not render all the graphics in the User Guide jupyter notebook in the github repository, you can see the text just not the output.
 To look at the graphics you can either download the html version and open in your browser, or view the html on github.io
 
-[User Guide on github.io](https://genomematt.github.io/survivalvolume/user_guide.html)
+[User Guide on github.io](https://genomematt.github.io/survivalvolume/docs/user_guide.html)
 
 [API documentation for parsing files](https://genomematt.github.io/survivalvolume/docs/parse.m.html)
 
@@ -67,6 +70,7 @@ Bug reports should be made to the issue tracker.  Difficulty in understanding ho
 #Citing survivalvolume
 
 Survivalvolume is currently unpublished and has a Zenodo id for each release. Please include the Zenodo DOI or a version number in your methods, and cite the github URL if supported by your journal.
+
 Wakefield, M.J, survivalvolume, (2016), Github repository, https://github.com/genomematt/survivalvolume
 
 #References
