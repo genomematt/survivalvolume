@@ -3,12 +3,14 @@ python:
   - "3.3"
   - "3.4"
   - "3.5"
-  - "3.6"
+  - "3.6-dev"
 install:
   - pip3 install .
 before_script:
   - pip3 install python-coveralls
   - pip3 install coverage
+  - pip3 install IPython
+  - pip3 install jinja2
   # configure a headless display to test plot generation
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"

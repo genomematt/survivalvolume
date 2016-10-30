@@ -15,7 +15,6 @@ setup(
       'pandas',
       'scipy',
       'xlrd',
-      'jinja2',#for mpld3
     ],
     packages=['survivalvolume',
               ],
