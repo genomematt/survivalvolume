@@ -4,7 +4,9 @@ A set of tools for parsing measurement with threshold over time data (eg tyre we
 # Installation
 
 Survival volume is written for use with Python3
-It has dependencies on matplotlib v1.3-1.5, mpld3, pandas and lifelines
+
+It has dependencies on matplotlib v1.3-1.5, mpld3, lifelines, scipy, pandas, numpy and xlrd.
+
 It is recommended that you use a pyvenv virtual environment.
 
 For a simple install using the release version of mpld3 you can either install from the Python Package Index (PyPI)
@@ -19,7 +21,7 @@ To run the tests use
 
 ```python3 -m survivalvolume.tests.test_all```
 
-It is also recommended to run the user_guide.ipynb file and visually compare it to the html version
+It is also recommended to run the user_guide.ipynb file and visually compare it to the html version (see below)
 
 ### Optionally install the development version of mpld3
 
@@ -50,11 +52,11 @@ Worked examples of how to use survivalvolume are provided in the user guide
 Github will not render all the graphics in the User Guide jupyter notebook in the github repository, you can see the text just not the output.
 To look at the graphics you can either download the html version and open in your browser, or view the html on github.io
 
-[User Guide on github.io](https://genomematt.github.io/SurvivalVolume/user_guide.html)
+[User Guide on github.io](https://genomematt.github.io/survivalvolume/user_guide.html)
 
-[API doucmentation for parsing files](https://genomematt.github.io/SurvivalVolume/docs/parse.m.html)
+[API documentation for parsing files](https://genomematt.github.io/survivalvolume/docs/parse.m.html)
 
-[API doucmentation for plotting files](https://genomematt.github.io/SurvivalVolume/docs/plot.m.html)
+[API documentation for plotting files](https://genomematt.github.io/survivalvolume/docs/plot.m.html)
 
 # Contributing to survivalvolume
 Survivalvolume is licensed under the GPLv3.  You are free to fork this repository under the terms of that license.  If you have suggested changes please start by raising an issue in the issue tracker.  Pull requests are welcome and will be included at the discretion of the author.
