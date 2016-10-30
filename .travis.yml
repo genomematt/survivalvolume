@@ -1,0 +1,16 @@
+language: python
+python:
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+install:
+  - pip3 install .
+before_script:
+  - pip3 install python-coveralls
+  - pip3 install coverage
+# command to run tests, e.g. python setup.py test
+script:
+  - coverage run --source survivalvolume.plot,survivalvolume.parse -m survivalvolume.tests.test_all
+after_success:
+  - coveralls
