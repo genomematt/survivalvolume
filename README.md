@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/genomematt/survivalvolume.svg?branch=master)](https://travis-ci.org/genomematt/survivalvolume)
+[![DOI](https://zenodo.org/badge/72341202.svg)](https://zenodo.org/badge/latestdoi/72341202)
 # SurvivalVolume
 v1.0.0
 Matthew Wakefield
