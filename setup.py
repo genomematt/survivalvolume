@@ -25,7 +25,7 @@ setup(
     description='Plotting tools for survival data',
     long_description='',
     classifiers=[
-          'Development Status :: 6 - beta',
+          'Development Status :: 4 - Beta',
           'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
           'Operating System :: POSIX',
           'Programming Language :: Python :: 3.3',
