@@ -29,10 +29,15 @@ __status__ = "alpha"
 
 def split_on_nans(data):
     """Split a pandas data frame at rows that contain all null values
+
     Argument:
+
         data - a pandas data frame
+
     Returns:
+
         a list of pandas data frames
+
     """
     result = []
     null_lines = data[data.isnull().all(axis=1) == True].index
@@ -48,12 +53,16 @@ def clean_tv_table(dirty_tv_table):
     have flanking NaN columns and rows
     Returns the table name/title and a pandas dataframe with samples
     as column ids and days as row ids
+
     Argument:
+
         dirty_tv_table - a pandas data frame with a title row
                          followed by a header row and rows of
                          data lines, surrounded by arbitrary 
                          NaN null cell entries
+
     Returns:
+
         name     - the value of the title row
         tv_table - a pandas data frame with named row columns
                    and row item identifiers
@@ -83,11 +92,15 @@ def studylog_prism_df_to_tv_tables(df):
 
 def studylog_prism_to_tv_tables(xlsx_filename, sheetname='PrismRaw'): #pragma no cover
     """A function for converting study log Excel files to dataframes
+    
     Arguments:
+
         xlsx_filename - a Studylog Excel Prism output file
         sheetname     - the name of the sheet to extract from
                         Default: 'PrismRaw'
+
     Returns:
+
         a python dictionary of {name:dataframe} where name is the
         title of the experimental group and dataframe is a pandas
         data frame with columns for each individual and rows for
@@ -99,12 +112,16 @@ def studylog_prism_to_tv_tables(xlsx_filename, sheetname='PrismRaw'): #pragma no
 def fixed_length_alternate_steps(start,length,step1,step2):
     """Generate list of numbers that increments buy
     steps of alternating magnitude eg [1,4,8,11,15]
+    
     Arguments:
+
         start    -  value of first entry in list
         length   -  length of list to be generated
         step1    -  the magnitude of odd numbered steps
         step2    -  the magnitude of even numbered steps
+
     Returns:
+
         a list of numeric values
     """
     result = []
@@ -125,11 +142,17 @@ def standardise_days(dataframe,first_interval=3,second_interval=4):
     day numbers to series incrementing by alternating periods.
     (eg 3 day and 4 day periods) to adjust for individuals going
     on study on different days of the week.
+    
     Arguments:
+
         dataframe          -  a pandas data frame with a
                               day based row index
         first_interval     -  the magnitude of odd numbered steps
         second_interval    -  the magnitude of even numbered steps
+    
+    Returns:
+
+        a pandas dataframe with standardised days as index.
     """
     dataframe.index = fixed_length_alternate_steps(1,len(dataframe.index),first_interval,second_interval)
     return dataframe
