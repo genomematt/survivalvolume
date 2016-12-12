@@ -4,7 +4,11 @@
 v1.0.0
 Matthew Wakefield
 
-A set of tools for parsing measurement with threshold over time data (eg tyre wear, tumour treatment studies) and generating interactive and static plots.
+Treatment studies of cancer frequently use tumour volume to measure response to therapy.  Therapeutic response will be apparent at different time points during the experiment.  Progressive disease (increasing volume), stable disease and regression (reduction in volume) under therapy are important measures of response in addition to the overall time to reach a defined maximum volume.  Traditional methods of presenting this data involve 3 unconnected graphs: line graphs of each individual, average volume of each group with standard error of the mean, and a Kaplan-Meier graph of time to maximum volume.
+
+Survival volume is a python package to produce an integrated plot of these three representations of the same data, and to provide interaction with the plots of volume to enhance exploration of outliers and subgroups that are of interest clinically.
+
+Survival volume can also be applied to any other survival application where a measurement is taken over time, and a threshold used to determine failure, eg tyre tread wear.
 
 # Installation
 
