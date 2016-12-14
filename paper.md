@@ -8,8 +8,12 @@ tags:
 authors:
  - name: Matthew J. Wakefield
    orcid: 0000-0001-6624-4698
-   affiliation: The Walter and Eliza Hall Institute
-   affiliation: The University of Melbourne
+   affiliation: 1,2
+affiliations:
+ - name: The Walter and Eliza Hall Institute
+   index: 1
+ - name: The University of Melbourne
+   index: 2
 date: 31 Oct 2016
 bibliography: paper.bib
 ---
@@ -27,4 +31,3 @@ Survival volume is released under the GPLv3 and is available from GitHub and PyP
 
 
 # References
-
