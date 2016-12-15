@@ -1,5 +1,8 @@
 [![Build Status](https://travis-ci.org/genomematt/survivalvolume.svg?branch=master)](https://travis-ci.org/genomematt/survivalvolume)
 [![DOI](https://zenodo.org/badge/72341202.svg)](https://zenodo.org/badge/latestdoi/72341202)
+[![JOSS](http://joss.theoj.org/papers/2876777be3db1050198a70bb6a8306a9/status.svg)](http://dx.doi.org/10.21105/joss.00111)
+[![PyPI](https://img.shields.io/pypi/v/survivalvolume.svg)](https://pypi.python.org/pypi/survivalvolume/)
+
 # SurvivalVolume
 v1.0.0
 Matthew Wakefield
@@ -74,9 +77,22 @@ Bug reports should be made to the issue tracker.  Difficulty in understanding ho
 
 #Citing survivalvolume
 
-Survivalvolume is currently unpublished and has a Zenodo id for each release. Please include the Zenodo DOI or a version number in your methods, and cite the github URL if supported by your journal.
+Survivalvolume is published in the Journal of Open Source Software. Please cite the paper in academic publications [DOI:10.21105/joss.00111](http://dx.doi.org/10.21105/joss.00111). Each release also has a Zenodo DOI identifier for each release.  In an ideal world this is what you would cite to indicate the code you use, and make everything more reproducible but academic credit is better served at the moment by the paper. Try and include the Zenodo DOI or a version number in your methods.  The DOI for the current release is [![Zenodo DOI](https://zenodo.org/badge/72341202.svg)](https://zenodo.org/badge/latestdoi/72341202)
 
-Wakefield, M.J, survivalvolume, (2016), Github repository, https://github.com/genomematt/survivalvolume
+```
+@article{JWakefield2016,
+  doi = {10.21105/joss.00111},
+  url = {http://dx.doi.org/10.21105/joss.00111},
+  year  = {2016},
+  month = {dec},
+  publisher = {The Open Journal},
+  volume = {1},
+  number = {8},
+  author = {Matthew J. Wakefield},
+  title = {{SurvivalVolume}: interactive volume threshold survival graphs},
+  journal = {The Journal of Open Source Software}
+}
+```
 
 #References
 Davidson-Pilon, C., Lifelines, (2016), Github repository, https://github.com/CamDavidsonPilon/lifelines
