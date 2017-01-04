@@ -9,3 +9,5 @@ sv/
 my great experiment.html
 sized6perpage.ai
 survivalvolume_github_pages
+dist/
+survivalvolume.egg-info/
