@@ -91,7 +91,8 @@ def studylog_prism_df_to_tv_tables(df):
     return dict(tv_tables)
 
 def studylog_prism_to_tv_tables(xlsx_filename, sheetname='PrismRaw'): #pragma no cover
-    """A function for converting study log Excel files to dataframes
+    """A function for converting study log Prism format Excel files
+    to dataframes.
     
     Arguments:
 
@@ -108,6 +109,68 @@ def studylog_prism_to_tv_tables(xlsx_filename, sheetname='PrismRaw'): #pragma no
     """
     df = pandas.read_excel(xlsx_filename, sheetname=sheetname, header=None)
     return studylog_prism_df_to_tv_tables(df)
+
+def clean_studylog_absolute_tv(absolute_tv_df):
+    """Cleans and reformat a dataframe of volume measurements
+    that has been extracted from a Studylog Absolute TV excel
+    spreadsheet.
+    Returns the table name/title and a pandas dataframe with samples
+    as column ids and days as row ids
+
+    Argument:
+
+        dirty_tv_table - a pandas data frame where the first
+                         three columns are Group, Animal ID	and
+                         Study Days Data Type followed by left
+                         aligned measurement columns named by day
+                         padded by NaN null cell entries.
+                         All entries must be from the same group
+
+    Returns:
+
+        tv_table - a pandas data frame with named row columns
+                   and row item identifiers
+    """
+    absolute_tv_df.dropna(axis=1, how='all', inplace=True)
+    absolute_tv_df.dropna(axis=0, how='all', inplace=True)
+    absolute_tv_df.index = absolute_tv_df['Animal ID']
+    return absolute_tv_df.T[3:]
+
+def studylog_absolute_to_tv_tables(xlsx_filename,
+                                   sheetname='Absolute TV',
+                                   header_length=5): #pragma no cover
+    """A function for converting study log Prism format Excel files
+    to dataframes.
+    
+    Arguments:
+
+        xlsx_filename - a Studylog Excel Absolute TV output file
+        sheetname     - the name of the sheet to extract from
+                        Default: 'Absolute TV'
+
+    Returns:
+
+        a python dictionary of {name:dataframe} where name is the
+        title of the experimental group and dataframe is a pandas
+        data frame with columns for each individual and rows for
+        volume measurements at a given time point
+        Note: Raw days are returned - use standardise_days to fix
+    """
+    absolute_df = pandas.read_excel(xlsx_filename,
+                                    sheetname=sheetname,
+                                    header=header_length)
+    return studylog_absolute_df_to_tv_tables(absolute_df)
+
+def studylog_absolute_df_to_tv_tables(absolute_df):
+    """abstracted from studylog_absolute_to_tv_tables to allow sane testing
+    Use studylog_absolute_to_tv_tables"""
+    absolute_df.sort_values(by=['Group'], inplace=True)
+    absolute_df.set_index(keys=['Group'], drop=False, inplace=True)
+    groups = absolute_df['Group'].unique().tolist()
+    tv_tables = {elem : pandas.DataFrame for elem in groups}
+    for key in tv_tables.keys():
+        tv_tables[key] = clean_studylog_absolute_tv(absolute_df[:][absolute_df.Group == key])
+    return tv_tables
 
 def fixed_length_alternate_steps(start,length,step1,step2):
     """Generate list of numbers that increments buy
