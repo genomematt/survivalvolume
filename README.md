@@ -79,7 +79,7 @@ Survivalvolume is licensed under the GPLv3.  You are free to fork this repositor
 Bug reports should be made to the issue tracker.  Difficulty in understanding how to use the software is a documentation bug, and should also be raised on the issue tracker with the tag `question` so your question and my response are easily found by others.
 
 
-#Citing survivalvolume
+# Citing survivalvolume
 
 Survivalvolume is published in the Journal of Open Source Software. Please cite the paper in academic publications [DOI:10.21105/joss.00111](http://dx.doi.org/10.21105/joss.00111). Each release also has a Zenodo DOI identifier for each release.  In an ideal world this is what you would cite to indicate the code you use, and make everything more reproducible but academic credit is better served at the moment by the paper. Try and include the Zenodo DOI or a version number in your methods.  The DOI for the current release is [![Zenodo DOI](https://zenodo.org/badge/72341202.svg)](https://zenodo.org/badge/latestdoi/72341202)
 
@@ -98,5 +98,5 @@ Survivalvolume is published in the Journal of Open Source Software. Please cite 
 }
 ```
 
-#References
+# References
 Davidson-Pilon, C., Lifelines, (2016), Github repository, https://github.com/CamDavidsonPilon/lifelines
