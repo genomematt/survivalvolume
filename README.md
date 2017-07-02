@@ -44,16 +44,20 @@ The mpld3 development version is only needed for interactive html dual volume an
 
 To install the development version of mpld3 you will need to
 
-```git clone https://github.com/mpld3/mpld3
+```
+git clone https://github.com/mpld3/mpld3
 cd mpld3/
 python3 setup.py submodule
-python3 setup.py install```
+python3 setup.py install
+```
 
 In your jupyter notebooks you will also need to redirect mpld3 to the local javascript files.
 
-```import mpld3
+```
+import mpld3
 mpld3.enable_notebook(d3_url='file://d3.v3.min.js',
-                     mpld3_url='file://mpld3.v0.3git.js')```
+                     mpld3_url='file://mpld3.v0.3git.js')
+```
 
 A mpld3 release v0.3 is in preparation and will remove the need to install the development version.
 
