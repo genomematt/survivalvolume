@@ -4,7 +4,7 @@
 [![PyPI](https://img.shields.io/pypi/v/survivalvolume.svg)](https://pypi.python.org/pypi/survivalvolume/)
 
 # SurvivalVolume
-v1.0.0
+v1.1.0
 Matthew Wakefield
 
 Treatment studies of cancer frequently use tumour volume to measure response to therapy.  Therapeutic response will be apparent at different time points during the experiment.  Progressive disease (increasing volume), stable disease and regression (reduction in volume) under therapy are important measures of response in addition to the overall time to reach a defined maximum volume.  Traditional methods of presenting this data involve 3 unconnected graphs: line graphs of each individual, average volume of each group with standard error of the mean, and a Kaplan-Meier graph of time to maximum volume.
@@ -34,32 +34,6 @@ To run the tests use
 ```python3 -m survivalvolume.tests.test_all```
 
 It is also recommended to run the user_guide.ipynb file and visually compare it to the html version (see below)
-
-### Optionally install the development version of mpld3
-
-Survival Volume is most fully featured with mpld3 version 0.3dev post commit 559dfc6.  Currently the easiest way to install a compatible version is to install from the current development master branch on github.
-Some features will still not work reliably until the required changes make their way into the javascript that gets downloaded by the html.  As of the last revision of this document in October 2016 the dual plots only display correctly in mpld3 if you use mpld3.show() or modify the url in the output.  Cached files can also create issues.
-
-The mpld3 development version is only needed for interactive html dual volume and survival plots.  PDF plots and volume plots are not affected by the inability to draw stepped lines in in mpld3 v0.2.
-
-To install the development version of mpld3 you will need to
-
-```
-git clone https://github.com/mpld3/mpld3
-cd mpld3/
-python3 setup.py submodule
-python3 setup.py install
-```
-
-In your jupyter notebooks you will also need to redirect mpld3 to the local javascript files.
-
-```
-import mpld3
-mpld3.enable_notebook(d3_url='file://d3.v3.min.js',
-                     mpld3_url='file://mpld3.v0.3git.js')
-```
-
-A mpld3 release v0.3 is in preparation and will remove the need to install the development version.
 
 # Usage
 
