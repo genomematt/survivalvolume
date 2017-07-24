@@ -895,16 +895,17 @@ class VolumeSurvivalPlot(TumourVolumePlot):
         result.print_summary()
         return result
     
-    def display(self, legend=True, use_mpld3=False, update=True, hide_volume_labels=True, **kw):
+    def display(self, legend=True, use_mpld3=True, update=True, hide_volume_labels=True, **kw):
         """Display the dual tumour volume and Kaplan Meier plot
-        KNOWN BUG - Currently mpld3 is not correctly displaying the step plot
-        The use_mpld3 flag has been added and currently defaults to False
+        KNOWN BUG - mpld3 does not correctly display the step plot in version < 0.3
         """
-        super(VolumeSurvivalPlot, self).display(legend=legend,
+        result = super(VolumeSurvivalPlot, self).display(legend=legend,
                                                 use_mpld3=use_mpld3,
                                                 update=update,
                                                 hide_volume_labels = hide_volume_labels,
                                                 **kw)
+        if use_mpld3:
+            return result
 
 
 
