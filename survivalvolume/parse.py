@@ -91,7 +91,7 @@ def studylog_prism_df_to_tv_tables(df):
     return dict(tv_tables)
 
 def studylog_prism_to_tv_tables(xlsx_filename, sheetname='PrismRaw'): #pragma no cover
-    """A function for converting study log Prism format Excel files
+    """A function for converting study log Absolute TV format Excel files
     to dataframes.
     
     Arguments:
