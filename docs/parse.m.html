@@ -903,8 +903,10 @@ table {
 .codehilite .mh { color: #666666 } /* Literal.Number.Hex */
 .codehilite .mi { color: #666666 } /* Literal.Number.Integer */
 .codehilite .mo { color: #666666 } /* Literal.Number.Oct */
+.codehilite .sa { color: #BA2121 } /* Literal.String.Affix */
 .codehilite .sb { color: #BA2121 } /* Literal.String.Backtick */
 .codehilite .sc { color: #BA2121 } /* Literal.String.Char */
+.codehilite .dl { color: #BA2121 } /* Literal.String.Delimiter */
 .codehilite .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
 .codehilite .s2 { color: #BA2121 } /* Literal.String.Double */
 .codehilite .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
@@ -915,9 +917,11 @@ table {
 .codehilite .s1 { color: #BA2121 } /* Literal.String.Single */
 .codehilite .ss { color: #19177C } /* Literal.String.Symbol */
 .codehilite .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #0000FF } /* Name.Function.Magic */
 .codehilite .vc { color: #19177C } /* Name.Variable.Class */
 .codehilite .vg { color: #19177C } /* Name.Variable.Global */
 .codehilite .vi { color: #19177C } /* Name.Variable.Instance */
+.codehilite .vm { color: #19177C } /* Name.Variable.Magic */
 .codehilite .il { color: #666666 } /* Literal.Number.Integer.Long */
   </style>
 
@@ -1042,10 +1046,13 @@ table {
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
+    <li class="mono"><a href="#parse.clean_studylog_absolute_tv">clean_studylog_absolute_tv</a></li>
     <li class="mono"><a href="#parse.clean_tv_table">clean_tv_table</a></li>
     <li class="mono"><a href="#parse.fixed_length_alternate_steps">fixed_length_alternate_steps</a></li>
     <li class="mono"><a href="#parse.split_on_nans">split_on_nans</a></li>
     <li class="mono"><a href="#parse.standardise_days">standardise_days</a></li>
+    <li class="mono"><a href="#parse.studylog_absolute_df_to_tv_tables">studylog_absolute_df_to_tv_tables</a></li>
+    <li class="mono"><a href="#parse.studylog_absolute_to_tv_tables">studylog_absolute_to_tv_tables</a></li>
     <li class="mono"><a href="#parse.studylog_prism_df_to_tv_tables">studylog_prism_df_to_tv_tables</a></li>
     <li class="mono"><a href="#parse.studylog_prism_to_tv_tables">studylog_prism_to_tv_tables</a></li>
   </ul>
@@ -1099,17 +1106,22 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2016 Matthew Wakefield, The Walter and Eliza Hall Institute and The University of Melbourne&quot;</span>
 <span class="n">__credits__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Matthew Wakefield&quot;</span><span class="p">,]</span>
 <span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;GPL&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.0.0b&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.1.0&quot;</span>
 <span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Matthew Wakefield&quot;</span>
 <span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;wakefield@wehi.edu.au&quot;</span>
-<span class="n">__status__</span> <span class="o">=</span> <span class="s2">&quot;alpha&quot;</span>
+<span class="n">__status__</span> <span class="o">=</span> <span class="s2">&quot;production&quot;</span>
 
 <span class="k">def</span> <span class="nf">split_on_nans</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Split a pandas data frame at rows that contain all null values</span>
+
 <span class="sd">    Argument:</span>
+
 <span class="sd">        data - a pandas data frame</span>
+
 <span class="sd">    Returns:</span>
+
 <span class="sd">        a list of pandas data frames</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">null_lines</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="bp">True</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
@@ -1125,12 +1137,16 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
 <span class="sd">    have flanking NaN columns and rows</span>
 <span class="sd">    Returns the table name/title and a pandas dataframe with samples</span>
 <span class="sd">    as column ids and days as row ids</span>
+
 <span class="sd">    Argument:</span>
+
 <span class="sd">        dirty_tv_table - a pandas data frame with a title row</span>
 <span class="sd">                         followed by a header row and rows of</span>
 <span class="sd">                         data lines, surrounded by arbitrary </span>
 <span class="sd">                         NaN null cell entries</span>
+
 <span class="sd">    Returns:</span>
+
 <span class="sd">        name     - the value of the title row</span>
 <span class="sd">        tv_table - a pandas data frame with named row columns</span>
 <span class="sd">                   and row item identifiers</span>
@@ -1159,12 +1175,17 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">tv_tables</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">studylog_prism_to_tv_tables</span><span class="p">(</span><span class="n">xlsx_filename</span><span class="p">,</span> <span class="n">sheetname</span><span class="o">=</span><span class="s1">&#39;PrismRaw&#39;</span><span class="p">):</span> <span class="c1">#pragma no cover</span>
-    <span class="sd">&quot;&quot;&quot;A function for converting study log Excel files to dataframes</span>
+    <span class="sd">&quot;&quot;&quot;A function for converting study log Absolute TV format Excel files</span>
+<span class="sd">    to dataframes.</span>
+<span class="sd">    </span>
 <span class="sd">    Arguments:</span>
+
 <span class="sd">        xlsx_filename - a Studylog Excel Prism output file</span>
 <span class="sd">        sheetname     - the name of the sheet to extract from</span>
 <span class="sd">                        Default: &#39;PrismRaw&#39;</span>
+
 <span class="sd">    Returns:</span>
+
 <span class="sd">        a python dictionary of {name:dataframe} where name is the</span>
 <span class="sd">        title of the experimental group and dataframe is a pandas</span>
 <span class="sd">        data frame with columns for each individual and rows for</span>
@@ -1173,15 +1194,81 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
     <span class="n">df</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xlsx_filename</span><span class="p">,</span> <span class="n">sheetname</span><span class="o">=</span><span class="n">sheetname</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">studylog_prism_df_to_tv_tables</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 
+<span class="k">def</span> <span class="nf">clean_studylog_absolute_tv</span><span class="p">(</span><span class="n">absolute_tv_df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Cleans and reformat a dataframe of volume measurements</span>
+<span class="sd">    that has been extracted from a Studylog Absolute TV excel</span>
+<span class="sd">    spreadsheet.</span>
+<span class="sd">    Returns the table name/title and a pandas dataframe with samples</span>
+<span class="sd">    as column ids and days as row ids</span>
+
+<span class="sd">    Argument:</span>
+
+<span class="sd">        dirty_tv_table - a pandas data frame where the first</span>
+<span class="sd">                         three columns are Group, Animal ID	and</span>
+<span class="sd">                         Study Days Data Type followed by left</span>
+<span class="sd">                         aligned measurement columns named by day</span>
+<span class="sd">                         padded by NaN null cell entries.</span>
+<span class="sd">                         All entries must be from the same group</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">        tv_table - a pandas data frame with named row columns</span>
+<span class="sd">                   and row item identifiers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">absolute_tv_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">absolute_tv_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">absolute_tv_df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">absolute_tv_df</span><span class="p">[</span><span class="s1">&#39;Animal ID&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">absolute_tv_df</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+
+<span class="k">def</span> <span class="nf">studylog_absolute_to_tv_tables</span><span class="p">(</span><span class="n">xlsx_filename</span><span class="p">,</span>
+                                   <span class="n">sheetname</span><span class="o">=</span><span class="s1">&#39;Absolute TV&#39;</span><span class="p">,</span>
+                                   <span class="n">header_length</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span> <span class="c1">#pragma no cover</span>
+    <span class="sd">&quot;&quot;&quot;A function for converting study log Prism format Excel files</span>
+<span class="sd">    to dataframes.</span>
+<span class="sd">    </span>
+<span class="sd">    Arguments:</span>
+
+<span class="sd">        xlsx_filename - a Studylog Excel Absolute TV output file</span>
+<span class="sd">        sheetname     - the name of the sheet to extract from</span>
+<span class="sd">                        Default: &#39;Absolute TV&#39;</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">        a python dictionary of {name:dataframe} where name is the</span>
+<span class="sd">        title of the experimental group and dataframe is a pandas</span>
+<span class="sd">        data frame with columns for each individual and rows for</span>
+<span class="sd">        volume measurements at a given time point</span>
+<span class="sd">        Note: Raw days are returned - use standardise_days to fix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">absolute_df</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xlsx_filename</span><span class="p">,</span>
+                                    <span class="n">sheetname</span><span class="o">=</span><span class="n">sheetname</span><span class="p">,</span>
+                                    <span class="n">header</span><span class="o">=</span><span class="n">header_length</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">studylog_absolute_df_to_tv_tables</span><span class="p">(</span><span class="n">absolute_df</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">studylog_absolute_df_to_tv_tables</span><span class="p">(</span><span class="n">absolute_df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;abstracted from studylog_absolute_to_tv_tables to allow sane testing</span>
+<span class="sd">    Use studylog_absolute_to_tv_tables&quot;&quot;&quot;</span>
+    <span class="n">absolute_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Group&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">absolute_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Group&#39;</span><span class="p">],</span> <span class="n">drop</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">groups</span> <span class="o">=</span> <span class="n">absolute_df</span><span class="p">[</span><span class="s1">&#39;Group&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">tv_tables</span> <span class="o">=</span> <span class="p">{</span><span class="n">elem</span> <span class="p">:</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">tv_tables</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">tv_tables</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">clean_studylog_absolute_tv</span><span class="p">(</span><span class="n">absolute_df</span><span class="p">[:][</span><span class="n">absolute_df</span><span class="o">.</span><span class="n">Group</span> <span class="o">==</span> <span class="n">key</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">tv_tables</span>
+
 <span class="k">def</span> <span class="nf">fixed_length_alternate_steps</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="n">length</span><span class="p">,</span><span class="n">step1</span><span class="p">,</span><span class="n">step2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Generate list of numbers that increments buy</span>
 <span class="sd">    steps of alternating magnitude eg [1,4,8,11,15]</span>
+<span class="sd">    </span>
 <span class="sd">    Arguments:</span>
+
 <span class="sd">        start    -  value of first entry in list</span>
 <span class="sd">        length   -  length of list to be generated</span>
 <span class="sd">        step1    -  the magnitude of odd numbered steps</span>
 <span class="sd">        step2    -  the magnitude of even numbered steps</span>
+
 <span class="sd">    Returns:</span>
+
 <span class="sd">        a list of numeric values</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1202,11 +1289,17 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
 <span class="sd">    day numbers to series incrementing by alternating periods.</span>
 <span class="sd">    (eg 3 day and 4 day periods) to adjust for individuals going</span>
 <span class="sd">    on study on different days of the week.</span>
+<span class="sd">    </span>
 <span class="sd">    Arguments:</span>
+
 <span class="sd">        dataframe          -  a pandas data frame with a</span>
 <span class="sd">                              day based row index</span>
 <span class="sd">        first_interval     -  the magnitude of odd numbered steps</span>
 <span class="sd">        second_interval    -  the magnitude of even numbered steps</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+
+<span class="sd">        a pandas dataframe with standardised days as index.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dataframe</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">fixed_length_alternate_steps</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">dataframe</span><span class="o">.</span><span class="n">index</span><span class="p">),</span><span class="n">first_interval</span><span class="p">,</span><span class="n">second_interval</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">dataframe</span>
@@ -1221,6 +1314,69 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
     <h2 class="section-title" id="header-functions">Functions</h2>
       
   <div class="item">
+    <div class="name def" id="parse.clean_studylog_absolute_tv">
+    <p>def <span class="ident">clean_studylog_absolute_tv</span>(</p><p>absolute_tv_df)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Cleans and reformat a dataframe of volume measurements
+that has been extracted from a Studylog Absolute TV excel
+spreadsheet.
+Returns the table name/title and a pandas dataframe with samples
+as column ids and days as row ids</p>
+<p>Argument:</p>
+<div class="codehilite"><pre><span></span>dirty_tv_table - a pandas data frame where the first
+                 three columns are Group, Animal ID     and
+                 Study Days Data Type followed by left
+                 aligned measurement columns named by day
+                 padded by NaN null cell entries.
+                 All entries must be from the same group
+</pre></div>
+
+
+<p>Returns:</p>
+<div class="codehilite"><pre><span></span>tv_table - a pandas data frame with named row columns
+           and row item identifiers
+</pre></div></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-parse.clean_studylog_absolute_tv', this);">Show source &equiv;</a></p>
+  <div id="source-parse.clean_studylog_absolute_tv" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">clean_studylog_absolute_tv</span><span class="p">(</span><span class="n">absolute_tv_df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Cleans and reformat a dataframe of volume measurements</span>
+<span class="sd">    that has been extracted from a Studylog Absolute TV excel</span>
+<span class="sd">    spreadsheet.</span>
+<span class="sd">    Returns the table name/title and a pandas dataframe with samples</span>
+<span class="sd">    as column ids and days as row ids</span>
+
+<span class="sd">    Argument:</span>
+
+<span class="sd">        dirty_tv_table - a pandas data frame where the first</span>
+<span class="sd">                         three columns are Group, Animal ID	and</span>
+<span class="sd">                         Study Days Data Type followed by left</span>
+<span class="sd">                         aligned measurement columns named by day</span>
+<span class="sd">                         padded by NaN null cell entries.</span>
+<span class="sd">                         All entries must be from the same group</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">        tv_table - a pandas data frame with named row columns</span>
+<span class="sd">                   and row item identifiers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">absolute_tv_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">absolute_tv_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">absolute_tv_df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">absolute_tv_df</span><span class="p">[</span><span class="s1">&#39;Animal ID&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">absolute_tv_df</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
     <div class="name def" id="parse.clean_tv_table">
     <p>def <span class="ident">clean_tv_table</span>(</p><p>dirty_tv_table)</p>
     </div>
@@ -1231,16 +1387,20 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
     <div class="desc"><p>The Tumour Volume tables generated by splitting on NaN lines
 have flanking NaN columns and rows
 Returns the table name/title and a pandas dataframe with samples
-as column ids and days as row ids
-Argument:
-    dirty_tv_table - a pandas data frame with a title row
-                     followed by a header row and rows of
-                     data lines, surrounded by arbitrary 
-                     NaN null cell entries
-Returns:
-    name     - the value of the title row
-    tv_table - a pandas data frame with named row columns
-               and row item identifiers</p></div>
+as column ids and days as row ids</p>
+<p>Argument:</p>
+<div class="codehilite"><pre><span></span>dirty_tv_table - a pandas data frame with a title row
+                 followed by a header row and rows of
+                 data lines, surrounded by arbitrary 
+                 NaN null cell entries
+</pre></div>
+
+
+<p>Returns:</p>
+<div class="codehilite"><pre><span></span>name     - the value of the title row
+tv_table - a pandas data frame with named row columns
+           and row item identifiers
+</pre></div></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-parse.clean_tv_table', this);">Show source &equiv;</a></p>
   <div id="source-parse.clean_tv_table" class="source">
@@ -1249,12 +1409,16 @@ Returns:
 <span class="sd">    have flanking NaN columns and rows</span>
 <span class="sd">    Returns the table name/title and a pandas dataframe with samples</span>
 <span class="sd">    as column ids and days as row ids</span>
+
 <span class="sd">    Argument:</span>
+
 <span class="sd">        dirty_tv_table - a pandas data frame with a title row</span>
 <span class="sd">                         followed by a header row and rows of</span>
 <span class="sd">                         data lines, surrounded by arbitrary </span>
 <span class="sd">                         NaN null cell entries</span>
+
 <span class="sd">    Returns:</span>
+
 <span class="sd">        name     - the value of the title row</span>
 <span class="sd">        tv_table - a pandas data frame with named row columns</span>
 <span class="sd">                   and row item identifiers</span>
@@ -1285,26 +1449,34 @@ Returns:
     
   
     <div class="desc"><p>Generate list of numbers that increments buy
-steps of alternating magnitude eg [1,4,8,11,15]
-Arguments:
-    start    -  value of first entry in list
-    length   -  length of list to be generated
-    step1    -  the magnitude of odd numbered steps
-    step2    -  the magnitude of even numbered steps
-Returns:
-    a list of numeric values</p></div>
+steps of alternating magnitude eg [1,4,8,11,15]</p>
+<p>Arguments:</p>
+<div class="codehilite"><pre><span></span>start    -  value of first entry in list
+length   -  length of list to be generated
+step1    -  the magnitude of odd numbered steps
+step2    -  the magnitude of even numbered steps
+</pre></div>
+
+
+<p>Returns:</p>
+<div class="codehilite"><pre><span></span>a list of numeric values
+</pre></div></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-parse.fixed_length_alternate_steps', this);">Show source &equiv;</a></p>
   <div id="source-parse.fixed_length_alternate_steps" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">fixed_length_alternate_steps</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="n">length</span><span class="p">,</span><span class="n">step1</span><span class="p">,</span><span class="n">step2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Generate list of numbers that increments buy</span>
 <span class="sd">    steps of alternating magnitude eg [1,4,8,11,15]</span>
+<span class="sd">    </span>
 <span class="sd">    Arguments:</span>
+
 <span class="sd">        start    -  value of first entry in list</span>
 <span class="sd">        length   -  length of list to be generated</span>
 <span class="sd">        step1    -  the magnitude of odd numbered steps</span>
 <span class="sd">        step2    -  the magnitude of even numbered steps</span>
+
 <span class="sd">    Returns:</span>
+
 <span class="sd">        a list of numeric values</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1335,20 +1507,29 @@ Returns:
 
     
   
-    <div class="desc"><p>Split a pandas data frame at rows that contain all null values
-Argument:
-    data - a pandas data frame
-Returns:
-    a list of pandas data frames</p></div>
+    <div class="desc"><p>Split a pandas data frame at rows that contain all null values</p>
+<p>Argument:</p>
+<div class="codehilite"><pre><span></span>data - a pandas data frame
+</pre></div>
+
+
+<p>Returns:</p>
+<div class="codehilite"><pre><span></span>a list of pandas data frames
+</pre></div></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-parse.split_on_nans', this);">Show source &equiv;</a></p>
   <div id="source-parse.split_on_nans" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">split_on_nans</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Split a pandas data frame at rows that contain all null values</span>
+
 <span class="sd">    Argument:</span>
+
 <span class="sd">        data - a pandas data frame</span>
+
 <span class="sd">    Returns:</span>
+
 <span class="sd">        a list of pandas data frames</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">null_lines</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="bp">True</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
@@ -1377,12 +1558,18 @@ Returns:
     <div class="desc"><p>Renumber days in study log files by changing
 day numbers to series incrementing by alternating periods.
 (eg 3 day and 4 day periods) to adjust for individuals going
-on study on different days of the week.
-Arguments:
-    dataframe          -  a pandas data frame with a
-                          day based row index
-    first_interval     -  the magnitude of odd numbered steps
-    second_interval    -  the magnitude of even numbered steps</p></div>
+on study on different days of the week.</p>
+<p>Arguments:</p>
+<div class="codehilite"><pre><span></span>dataframe          -  a pandas data frame with a
+                      day based row index
+first_interval     -  the magnitude of odd numbered steps
+second_interval    -  the magnitude of even numbered steps
+</pre></div>
+
+
+<p>Returns:</p>
+<div class="codehilite"><pre><span></span>a pandas dataframe with standardised days as index.
+</pre></div></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-parse.standardise_days', this);">Show source &equiv;</a></p>
   <div id="source-parse.standardise_days" class="source">
@@ -1391,14 +1578,110 @@ Arguments:
 <span class="sd">    day numbers to series incrementing by alternating periods.</span>
 <span class="sd">    (eg 3 day and 4 day periods) to adjust for individuals going</span>
 <span class="sd">    on study on different days of the week.</span>
+<span class="sd">    </span>
 <span class="sd">    Arguments:</span>
+
 <span class="sd">        dataframe          -  a pandas data frame with a</span>
 <span class="sd">                              day based row index</span>
 <span class="sd">        first_interval     -  the magnitude of odd numbered steps</span>
 <span class="sd">        second_interval    -  the magnitude of even numbered steps</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+
+<span class="sd">        a pandas dataframe with standardised days as index.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dataframe</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">fixed_length_alternate_steps</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">dataframe</span><span class="o">.</span><span class="n">index</span><span class="p">),</span><span class="n">first_interval</span><span class="p">,</span><span class="n">second_interval</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">dataframe</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="parse.studylog_absolute_df_to_tv_tables">
+    <p>def <span class="ident">studylog_absolute_df_to_tv_tables</span>(</p><p>absolute_df)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>abstracted from studylog_absolute_to_tv_tables to allow sane testing
+Use studylog_absolute_to_tv_tables</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-parse.studylog_absolute_df_to_tv_tables', this);">Show source &equiv;</a></p>
+  <div id="source-parse.studylog_absolute_df_to_tv_tables" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">studylog_absolute_df_to_tv_tables</span><span class="p">(</span><span class="n">absolute_df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;abstracted from studylog_absolute_to_tv_tables to allow sane testing</span>
+<span class="sd">    Use studylog_absolute_to_tv_tables&quot;&quot;&quot;</span>
+    <span class="n">absolute_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Group&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">absolute_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Group&#39;</span><span class="p">],</span> <span class="n">drop</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">groups</span> <span class="o">=</span> <span class="n">absolute_df</span><span class="p">[</span><span class="s1">&#39;Group&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">tv_tables</span> <span class="o">=</span> <span class="p">{</span><span class="n">elem</span> <span class="p">:</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">tv_tables</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">tv_tables</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">clean_studylog_absolute_tv</span><span class="p">(</span><span class="n">absolute_df</span><span class="p">[:][</span><span class="n">absolute_df</span><span class="o">.</span><span class="n">Group</span> <span class="o">==</span> <span class="n">key</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">tv_tables</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="parse.studylog_absolute_to_tv_tables">
+    <p>def <span class="ident">studylog_absolute_to_tv_tables</span>(</p><p>xlsx_filename, sheetname=&#39;Absolute TV&#39;, header_length=5)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>A function for converting study log Prism format Excel files
+to dataframes.</p>
+<p>Arguments:</p>
+<div class="codehilite"><pre><span></span>xlsx_filename - a Studylog Excel Absolute TV output file
+sheetname     - the name of the sheet to extract from
+                Default: &#39;Absolute TV&#39;
+</pre></div>
+
+
+<p>Returns:</p>
+<div class="codehilite"><pre><span></span>a python dictionary of {name:dataframe} where name is the
+title of the experimental group and dataframe is a pandas
+data frame with columns for each individual and rows for
+volume measurements at a given time point
+Note: Raw days are returned - use standardise_days to fix
+</pre></div></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-parse.studylog_absolute_to_tv_tables', this);">Show source &equiv;</a></p>
+  <div id="source-parse.studylog_absolute_to_tv_tables" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">studylog_absolute_to_tv_tables</span><span class="p">(</span><span class="n">xlsx_filename</span><span class="p">,</span>
+                                   <span class="n">sheetname</span><span class="o">=</span><span class="s1">&#39;Absolute TV&#39;</span><span class="p">,</span>
+                                   <span class="n">header_length</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span> <span class="c1">#pragma no cover</span>
+    <span class="sd">&quot;&quot;&quot;A function for converting study log Prism format Excel files</span>
+<span class="sd">    to dataframes.</span>
+<span class="sd">    </span>
+<span class="sd">    Arguments:</span>
+
+<span class="sd">        xlsx_filename - a Studylog Excel Absolute TV output file</span>
+<span class="sd">        sheetname     - the name of the sheet to extract from</span>
+<span class="sd">                        Default: &#39;Absolute TV&#39;</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">        a python dictionary of {name:dataframe} where name is the</span>
+<span class="sd">        title of the experimental group and dataframe is a pandas</span>
+<span class="sd">        data frame with columns for each individual and rows for</span>
+<span class="sd">        volume measurements at a given time point</span>
+<span class="sd">        Note: Raw days are returned - use standardise_days to fix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">absolute_df</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xlsx_filename</span><span class="p">,</span>
+                                    <span class="n">sheetname</span><span class="o">=</span><span class="n">sheetname</span><span class="p">,</span>
+                                    <span class="n">header</span><span class="o">=</span><span class="n">header_length</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">studylog_absolute_df_to_tv_tables</span><span class="p">(</span><span class="n">absolute_df</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1448,26 +1731,36 @@ Use studylog_prism_to_tv_tables</p></div>
 
     
   
-    <div class="desc"><p>A function for converting study log Excel files to dataframes
-Arguments:
-    xlsx_filename - a Studylog Excel Prism output file
-    sheetname     - the name of the sheet to extract from
-                    Default: 'PrismRaw'
-Returns:
-    a python dictionary of {name:dataframe} where name is the
-    title of the experimental group and dataframe is a pandas
-    data frame with columns for each individual and rows for
-    volume measurements at a given time point</p></div>
+    <div class="desc"><p>A function for converting study log Absolute TV format Excel files
+to dataframes.</p>
+<p>Arguments:</p>
+<div class="codehilite"><pre><span></span>xlsx_filename - a Studylog Excel Prism output file
+sheetname     - the name of the sheet to extract from
+                Default: &#39;PrismRaw&#39;
+</pre></div>
+
+
+<p>Returns:</p>
+<div class="codehilite"><pre><span></span>a python dictionary of {name:dataframe} where name is the
+title of the experimental group and dataframe is a pandas
+data frame with columns for each individual and rows for
+volume measurements at a given time point
+</pre></div></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-parse.studylog_prism_to_tv_tables', this);">Show source &equiv;</a></p>
   <div id="source-parse.studylog_prism_to_tv_tables" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">studylog_prism_to_tv_tables</span><span class="p">(</span><span class="n">xlsx_filename</span><span class="p">,</span> <span class="n">sheetname</span><span class="o">=</span><span class="s1">&#39;PrismRaw&#39;</span><span class="p">):</span> <span class="c1">#pragma no cover</span>
-    <span class="sd">&quot;&quot;&quot;A function for converting study log Excel files to dataframes</span>
+    <span class="sd">&quot;&quot;&quot;A function for converting study log Absolute TV format Excel files</span>
+<span class="sd">    to dataframes.</span>
+<span class="sd">    </span>
 <span class="sd">    Arguments:</span>
+
 <span class="sd">        xlsx_filename - a Studylog Excel Prism output file</span>
 <span class="sd">        sheetname     - the name of the sheet to extract from</span>
 <span class="sd">                        Default: &#39;PrismRaw&#39;</span>
+
 <span class="sd">    Returns:</span>
+
 <span class="sd">        a python dictionary of {name:dataframe} where name is the</span>
 <span class="sd">        title of the experimental group and dataframe is a pandas</span>
 <span class="sd">        data frame with columns for each individual and rows for</span>
