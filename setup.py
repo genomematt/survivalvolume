@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='survivalvolume',
-    version='1.0.0',
+    version='1.1.0',
     author='Matthew Wakefield',
     author_email='matthew.wakefield@unimelb.edu.au',
     install_requires = [
@@ -25,7 +25,7 @@ setup(
     description='Plotting tools for survival data',
     long_description='',
     classifiers=[
-          'Development Status :: 4 - Beta',
+          'Development Status :: 5 - Production/Stable',
           'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
           'Operating System :: POSIX',
           'Programming Language :: Python :: 3.3',

@@ -21,10 +21,10 @@ __author__ = "Matthew Wakefield"
 __copyright__ = "Copyright 2016 Matthew Wakefield, The Walter and Eliza Hall Institute and The University of Melbourne"
 __credits__ = ["Matthew Wakefield",]
 __license__ = "GPLv3"
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __maintainer__ = "Matthew Wakefield"
 __email__ = "wakefield@wehi.edu.au"
-__status__ = "beta"
+__status__ = "production"
 
 
 good_treatment = {'1231': {1: 196.6511265488, 4: 153.77168576, 8: 256.2981557136, 11: 233.54513028, 15: 206.6672908608, 18: 150.1259375, 22: 172.9756540512, 25: 205.4925104848, 29: 126.5664078448, 32: 145.55837835, 36: 184.172373, 39: 157.5682973172, 43: 110.0958860232, 46: 139.7430835416, 50: 129.8203368, 53: 123.3139826688, 57: 42.0091489972, 60: 65.1947298156, 64: 28.644472626, 67: 59.83617024, 71: 46.8841576896, 74: 19.5307208712, 78: 6.346032},

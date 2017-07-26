@@ -25,10 +25,10 @@ __author__ = "Matthew Wakefield"
 __copyright__ = "Copyright 2016 Matthew Wakefield, The Walter and Eliza Hall Institute and The University of Melbourne"
 __credits__ = ["Matthew Wakefield",]
 __license__ = "GPLv3"
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __maintainer__ = "Matthew Wakefield"
 __email__ = "wakefield@wehi.edu.au"
-__status__ = "beta"
+__status__ = "production"
 
 
 class test_parse(unittest.TestCase):
@@ -118,6 +118,34 @@ Day
 15   400.35  500.62  750.18
 18   500.62  750.18     NaN
 22   750.18     NaN     NaN""")
+
+    def test_studylog_absolute_df_to_tv_tables(self):
+        data = pandas.read_csv(io.StringIO("""FakeTestData,,,,,,,,,,,,
+Task: Tumor Volume (mm_),,,,,,,,,,,,
+Absolute Values,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+Group,Animal ID,"Study Days
+Data Type","1","5","26","30","33","36","40","44","44","47"
+DPBS,9981,Abs,221.72,321.42,543.99,579.91,646.02,642.85,790.69,,,
+DPBS,9982,Abs,278.24,188.04,635.60,540.36,702.74,,,,,
+DPBS,ABCD,Abs,215.42,213.96,524.10,508.32,466.58,595.97,429.50,626.53,554.09,850.12
+Mock,9986 (T3),Abs,225.25,243.62,520.71,672.37,656.77,,,,,
+Mock,9991,Abs,197.33,342.86,373.02,248.24,302.37,342.32,531.49,426.04,501.13,555.22
+Mock,9992,Abs,237.19,238.24,436.23,503.68,646.62,595.41,673.14,620.50,764.15,"""), header=5)
+        result = studylog_absolute_df_to_tv_tables(data)
+        self.assertEqual(repr(result['DPBS']),
+"""Animal ID    9981    9982    ABCD
+1          221.72  278.24  215.42
+5          321.42  188.04  213.96
+26         543.99   635.6   524.1
+30         579.91  540.36  508.32
+33         646.02  702.74  466.58
+36         642.85     NaN  595.97
+40         790.69     NaN   429.5
+44            NaN     NaN  626.53
+44.1          NaN     NaN  554.09
+47            NaN     NaN  850.12""")
         
     def test_fixed_length_alternate_steps(self):
         self.assertEqual(fixed_length_alternate_steps(1,12,3,4),[1, 4, 8, 11, 15, 18, 22, 25, 29, 32, 36, 39])
