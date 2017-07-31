@@ -903,8 +903,10 @@ table {
 .codehilite .mh { color: #666666 } /* Literal.Number.Hex */
 .codehilite .mi { color: #666666 } /* Literal.Number.Integer */
 .codehilite .mo { color: #666666 } /* Literal.Number.Oct */
+.codehilite .sa { color: #BA2121 } /* Literal.String.Affix */
 .codehilite .sb { color: #BA2121 } /* Literal.String.Backtick */
 .codehilite .sc { color: #BA2121 } /* Literal.String.Char */
+.codehilite .dl { color: #BA2121 } /* Literal.String.Delimiter */
 .codehilite .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
 .codehilite .s2 { color: #BA2121 } /* Literal.String.Double */
 .codehilite .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
@@ -915,9 +917,11 @@ table {
 .codehilite .s1 { color: #BA2121 } /* Literal.String.Single */
 .codehilite .ss { color: #19177C } /* Literal.String.Symbol */
 .codehilite .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #0000FF } /* Name.Function.Magic */
 .codehilite .vc { color: #19177C } /* Name.Variable.Class */
 .codehilite .vg { color: #19177C } /* Name.Variable.Global */
 .codehilite .vi { color: #19177C } /* Name.Variable.Instance */
+.codehilite .vm { color: #19177C } /* Name.Variable.Magic */
 .codehilite .il { color: #666666 } /* Literal.Number.Integer.Long */
   </style>
 
@@ -1167,10 +1171,10 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2016 Matthew Wakefield, The Walter and Eliza Hall Institute and The University of Melbourne&quot;</span>
 <span class="n">__credits__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Matthew Wakefield&quot;</span><span class="p">,]</span>
 <span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;GPLv3&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.0.0b1&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.1.0&quot;</span>
 <span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Matthew Wakefield&quot;</span>
 <span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;wakefield@wehi.edu.au&quot;</span>
-<span class="n">__status__</span> <span class="o">=</span> <span class="s2">&quot;beta&quot;</span>
+<span class="n">__status__</span> <span class="o">=</span> <span class="s2">&quot;production&quot;</span>
 
 <span class="k">def</span> <span class="nf">version</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Return the symatic versioning format version number&quot;&quot;&quot;</span>
@@ -1292,7 +1296,7 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
 <span class="s2">    };</span>
 <span class="s2">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lines</span> <span class="o">=</span> <span class="n">lines</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;linehighlight&quot;</span><span class="p">,</span>
                       <span class="s2">&quot;line_ids&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">],</span>
@@ -1307,7 +1311,7 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
 <span class="sd">    mouse over highlighting of individuals and labeling with the column</span>
 <span class="sd">    name.  Static pdfs can also be generated.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initiate a new tumour TumourVolumePlot object</span>
 <span class="sd">        </span>
 <span class="sd">        Arguments:</span>
@@ -1757,7 +1761,7 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
 <span class="sd">        **kw - keyword arguments are passed to</span>
 <span class="sd">               matplotlib.pyplot.subplots</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">km_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">vertical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">km_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">vertical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">vertical</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">km_ax</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;height_ratios&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span><span class="n">km_size</span><span class="p">]},</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -2032,16 +2036,17 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
         <span class="n">result</span><span class="o">.</span><span class="n">print_summary</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">result</span>
     
-    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">use_mpld3</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">hide_volume_labels</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">use_mpld3</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">hide_volume_labels</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Display the dual tumour volume and Kaplan Meier plot</span>
-<span class="sd">        KNOWN BUG - Currently mpld3 is not correctly displaying the step plot</span>
-<span class="sd">        The use_mpld3 flag has been added and currently defaults to False</span>
+<span class="sd">        KNOWN BUG - mpld3 does not correctly display the step plot in version &lt; 0.3</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">VolumeSurvivalPlot</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">VolumeSurvivalPlot</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span>
                                                 <span class="n">use_mpld3</span><span class="o">=</span><span class="n">use_mpld3</span><span class="p">,</span>
                                                 <span class="n">update</span><span class="o">=</span><span class="n">update</span><span class="p">,</span>
                                                 <span class="n">hide_volume_labels</span> <span class="o">=</span> <span class="n">hide_volume_labels</span><span class="p">,</span>
                                                 <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">use_mpld3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">result</span>
 </pre></div>
 
   </div>
@@ -2314,7 +2319,7 @@ Adapted from mpld3 example code</p></div>
 <span class="s2">    };</span>
 <span class="s2">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lines</span> <span class="o">=</span> <span class="n">lines</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;linehighlight&quot;</span><span class="p">,</span>
                       <span class="s2">&quot;line_ids&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">],</span>
@@ -2358,7 +2363,7 @@ Adapted from mpld3 example code</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-plot.HighlightLines.__init__', this);">Show source &equiv;</a></p>
   <div id="source-plot.HighlightLines.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lines</span> <span class="o">=</span> <span class="n">lines</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">dict_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;linehighlight&quot;</span><span class="p">,</span>
                   <span class="s2">&quot;line_ids&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">],</span>
@@ -2488,7 +2493,7 @@ name.  Static pdfs can also be generated.</p></div>
 <span class="sd">    mouse over highlighting of individuals and labeling with the column</span>
 <span class="sd">    name.  Static pdfs can also be generated.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initiate a new tumour TumourVolumePlot object</span>
 <span class="sd">        </span>
 <span class="sd">        Arguments:</span>
@@ -2951,7 +2956,7 @@ name.  Static pdfs can also be generated.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-plot.TumourVolumePlot.__init__', this);">Show source &equiv;</a></p>
   <div id="source-plot.TumourVolumePlot.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Initiate a new tumour TumourVolumePlot object</span>
 <span class="sd">    </span>
 <span class="sd">    Arguments:</span>
@@ -3987,7 +3992,7 @@ vertical -  Stack the Tumour Volume plot over the survival plot
 <span class="sd">        **kw - keyword arguments are passed to</span>
 <span class="sd">               matplotlib.pyplot.subplots</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">km_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">vertical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">km_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">vertical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">vertical</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">km_ax</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;height_ratios&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span><span class="n">km_size</span><span class="p">]},</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -4262,16 +4267,17 @@ vertical -  Stack the Tumour Volume plot over the survival plot
         <span class="n">result</span><span class="o">.</span><span class="n">print_summary</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">result</span>
     
-    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">use_mpld3</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">hide_volume_labels</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">use_mpld3</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">hide_volume_labels</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Display the dual tumour volume and Kaplan Meier plot</span>
-<span class="sd">        KNOWN BUG - Currently mpld3 is not correctly displaying the step plot</span>
-<span class="sd">        The use_mpld3 flag has been added and currently defaults to False</span>
+<span class="sd">        KNOWN BUG - mpld3 does not correctly display the step plot in version &lt; 0.3</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">VolumeSurvivalPlot</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">VolumeSurvivalPlot</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span>
                                                 <span class="n">use_mpld3</span><span class="o">=</span><span class="n">use_mpld3</span><span class="p">,</span>
                                                 <span class="n">update</span><span class="o">=</span><span class="n">update</span><span class="p">,</span>
                                                 <span class="n">hide_volume_labels</span> <span class="o">=</span> <span class="n">hide_volume_labels</span><span class="p">,</span>
                                                 <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">use_mpld3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">result</span>
 </pre></div>
 
   </div>
@@ -4303,7 +4309,7 @@ vertical -  Stack the Tumour Volume plot over the survival plot
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-plot.VolumeSurvivalPlot.__init__', this);">Show source &equiv;</a></p>
   <div id="source-plot.VolumeSurvivalPlot.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">km_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">vertical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">km_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">vertical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">vertical</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">km_ax</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;height_ratios&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span><span class="n">km_size</span><span class="p">]},</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -4804,28 +4810,28 @@ dashes   -  A line dash pattern as an even length list
             
   <div class="item">
     <div class="name def" id="plot.VolumeSurvivalPlot.display">
-    <p>def <span class="ident">display</span>(</p><p>self, legend=True, use_mpld3=False, update=True, hide_volume_labels=True, **kw)</p>
+    <p>def <span class="ident">display</span>(</p><p>self, legend=True, use_mpld3=True, update=True, hide_volume_labels=True, **kw)</p>
     </div>
     
 
     
   
     <div class="desc"><p>Display the dual tumour volume and Kaplan Meier plot
-KNOWN BUG - Currently mpld3 is not correctly displaying the step plot
-The use_mpld3 flag has been added and currently defaults to False</p></div>
+KNOWN BUG - mpld3 does not correctly display the step plot in version &lt; 0.3</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-plot.VolumeSurvivalPlot.display', this);">Show source &equiv;</a></p>
   <div id="source-plot.VolumeSurvivalPlot.display" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">use_mpld3</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">hide_volume_labels</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">use_mpld3</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">hide_volume_labels</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Display the dual tumour volume and Kaplan Meier plot</span>
-<span class="sd">    KNOWN BUG - Currently mpld3 is not correctly displaying the step plot</span>
-<span class="sd">    The use_mpld3 flag has been added and currently defaults to False</span>
+<span class="sd">    KNOWN BUG - mpld3 does not correctly display the step plot in version &lt; 0.3</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="nb">super</span><span class="p">(</span><span class="n">VolumeSurvivalPlot</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">VolumeSurvivalPlot</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span>
                                             <span class="n">use_mpld3</span><span class="o">=</span><span class="n">use_mpld3</span><span class="p">,</span>
                                             <span class="n">update</span><span class="o">=</span><span class="n">update</span><span class="p">,</span>
                                             <span class="n">hide_volume_labels</span> <span class="o">=</span> <span class="n">hide_volume_labels</span><span class="p">,</span>
                                             <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">use_mpld3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">result</span>
 </pre></div>
 
   </div>
@@ -5497,6 +5503,10 @@ lw     -   the width of the line bordering the patch in points
             <div class="item">
             <p id="plot.VolumeSurvivalPlot.lines" class="name">var <span class="ident">lines</span></p>
             
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#plot.TumourVolumePlot">TumourVolumePlot</a></code>.<code><a href="#plot.TumourVolumePlot.lines">lines</a></code>
+    </p>
 
             
   
@@ -5557,10 +5567,6 @@ lw     -   the width of the line bordering the patch in points
             <div class="item">
             <p id="plot.VolumeSurvivalPlot.xlim" class="name">var <span class="ident">xlim</span></p>
             
-    <p class="inheritance">
-     <strong>Inheritance:</strong>
-       <code><a href="#plot.TumourVolumePlot">TumourVolumePlot</a></code>.<code><a href="#plot.TumourVolumePlot.xlim">xlim</a></code>
-    </p>
 
             
   
