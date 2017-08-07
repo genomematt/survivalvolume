@@ -87,6 +87,55 @@ class test_parse(unittest.TestCase):
         self.assertEqual(repr(tvp.means['TestData'][0].get_data()),"(Int64Index([0, 1, 2], dtype='int64'), array([ 166.66666667,  383.33333333,  525.        ]))")
         self.assertEqual(repr(type(tvp.means['TestData'][0])),"<class 'matplotlib.lines.Line2D'>")
 
+    def test_TumourVolumePlot__calc_norm_ci(self):
+        tvp = TumourVolumePlot()
+        df = pandas.DataFrame([[100,300,100],
+                               [200,750,200],
+                               [750,nan,300],
+                               ])
+        self.assertEqual(tvp._calc_norm_ci(df).to_dict(),
+            {'lower bound': {0: 36.002401030663037,
+                             1: 24.00660283432336,
+                             2: 84.00810347848784},
+             'mean': {0: 166.66666666666666,
+                      1: 383.33333333333331,
+                      2: 525.0},
+             'upper bound': {0: 297.33093230267025,
+                             1: 742.66006383234321,
+                             2: 965.99189652151222}
+             })
+    
+    def test_TumourVolumePlot__calc_t_ci(self):
+        tvp = TumourVolumePlot()
+        df = pandas.DataFrame([[100,300,100],
+                               [200,750,200],
+                               [750,nan,300],
+                               ])
+        df.index = [7,14,21]
+        self.assertEqual(tvp._calc_t_ci(df).index,df.index)
+        self.assertEqual(tvp._calc_t_ci(df).to_dict(),
+            {'lower bound': {0: 0, 1: 0, 2: 0},
+             'mean': {0: 166.66666666666666,
+                      1: 383.33333333333331,
+                      2: 525.0},
+             'upper bound': {0: 453.51018199408497,
+                             1: 1172.1530004837336,
+                             2: 3383.8960656972213}
+            })
+        df = pandas.DataFrame([[101,99,100,102,98,100],
+                               [201,199,200,202,198,200],
+                               [501,499,500,502,498,500],
+                               ])
+        self.assertEqual(tvp._calc_t_ci(df).to_dict(),
+            {'lower bound': {0: 98.515873884656514,
+                             1: 198.51587388465651,
+                             2: 498.51587388465651},
+             'mean': {0: 100.0, 1: 200.0, 2: 500.0},
+             'upper bound': {0: 101.48412611534349,
+                             1: 201.48412611534349,
+                             2: 501.48412611534349}
+            })
+
     def test_TumourVolumePlot_add_interval(self):
         tvp = TumourVolumePlot()
         df = pandas.DataFrame([[100,300,100],
@@ -96,15 +145,15 @@ class test_parse(unittest.TestCase):
         tvp.add_interval('TestData',df)
         self.assertEqual(list(tvp.intervals),['TestData'])
         self.assertEqual(repr(type(tvp.intervals['TestData'])),"<class 'matplotlib.collections.PolyCollection'>")
-        self.assertEqual(repr(tvp.intervals['TestData'].__dict__['_paths']),"""[Path(array([[   0.        ,  297.3309323 ],
-       [   0.        ,   36.00240103],
-       [   1.        ,   24.00660283],
-       [   2.        ,   84.00810348],
-       [   2.        ,  965.99189652],
-       [   2.        ,  965.99189652],
-       [   1.        ,  742.66006383],
-       [   0.        ,  297.3309323 ],
-       [   0.        ,  297.3309323 ]]), array([ 1,  2,  2,  2,  2,  2,  2,  2, 79], dtype=uint8))]""")
+        self.assertEqual(repr(tvp.intervals['TestData'].__dict__['_paths']),"""[Path(array([[  0.00000000e+00,   4.53510182e+02],
+       [  0.00000000e+00,   0.00000000e+00],
+       [  1.00000000e+00,   0.00000000e+00],
+       [  2.00000000e+00,   0.00000000e+00],
+       [  2.00000000e+00,   3.38389607e+03],
+       [  2.00000000e+00,   3.38389607e+03],
+       [  1.00000000e+00,   1.17215300e+03],
+       [  0.00000000e+00,   4.53510182e+02],
+       [  0.00000000e+00,   4.53510182e+02]]), array([ 1,  2,  2,  2,  2,  2,  2,  2, 79], dtype=uint8))]""")
 
     @unittest.expectedFailure
     def test_TumourVolumePlot_display(self):

@@ -445,19 +445,54 @@ class TumourVolumePlot():
                                         **kw)
         pass
 
-    def add_interval(self, name, tv_table, ci=0.95,
+    def _calc_t_ci(self, tv_table, ci=0.95):
+        uppers = []
+        lowers = []
+        means = []
+        for entry in tv_table.T:
+            data = tv_table.T[entry].dropna()
+            mean = np.mean(data)
+            (lower,upper) = scipy.stats.t.interval(0.95,
+                                df=len(data)-1,
+                                loc=mean,
+                                scale=np.std(data,ddof=1) / np.sqrt(len(data)),
+                                )
+            uppers.append(upper)
+            lowers.append(lower)
+            means.append(mean)
+        cis = pandas.DataFrame({'mean':means,
+                              'lower bound':[max(0,x) for x in lowers], #limit to +ve
+                              'upper bound':uppers,
+            }).dropna()
+        cis.index = tv_table.index[:len(cis.index)]
+        return cis
+    
+    
+    def _calc_norm_ci(self, tv_table, ci=0.95):
+        interval = scipy.stats.norm.interval(ci, loc=tv_table.mean(axis=1),
+                                               scale=tv_table.sem(axis=1))
+        cis = pandas.DataFrame({'mean':tv_table.mean(axis=1),
+                              'lower bound':[max(0,x) for x in interval[0]], #limit to +ve
+                              'upper bound':interval[1],
+            }).dropna()
+        return cis
+    
+    def add_interval(self, name, tv_table, threshold=2, ci=0.95,
                         color = 'black', alpha=0.2,
                         lw=0, dashes = [],
                         **kw):
-        """Calculate the standard error of the mean and add to the plot
-        as a shaded band around the mean. These individuals should be a
+        """Calculate the confidence interval of the mean and add to the 
+        plot as a shaded band around the mean. These individuals should be a
         logical group (eg treatment).
         Note that the value is the confidence interval for the standard
         error of the mean and indicates the range the mean is expected
-        to lie within.  This should not be confused with the standard
-        deviation of the data (the range within individual data is expected
-        to lie).  The standard error of the mean indicates the effect
-        of sampling on the mean and will decrease with increased n.
+        to lie within ci % of the time.
+        This should not be confused with the standard deviation of the data 
+        (the range within individual data is expected to lie) or the standard
+        error of the mean.
+        As most data is expected to have a small number of observations, the
+        95% confidence interval is calculated using a t distribution.
+        Results match R's t-test and Graphpad Prism's 95% CI
         
         Arguments:
         
@@ -487,12 +522,7 @@ class TumourVolumePlot():
             **kw     -  additional key word arguments are passed to
                         matplotlib.axes.fill_between
         """
-        interval = scipy.stats.norm.interval(ci, loc=tv_table.mean(axis=1),
-                                               scale=tv_table.sem(axis=1))
-        cis = pandas.DataFrame({'mean':tv_table.mean(axis=1),
-                              'lower bound':[max(0,x) for x in interval[0]], #limit to +ve
-                              'upper bound':interval[1],
-            }).dropna()
+        cis = self._calc_t_ci(tv_table[tv_table.count(axis=1) > threshold], ci=ci)
         self.intervals[name] = self.ax.fill_between([int(x) for x in cis.index],
                                                    cis['lower bound'],
                                                    cis['upper bound'],
