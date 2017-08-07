@@ -400,7 +400,7 @@ class TumourVolumePlot():
                             plugins.LineLabelTooltip(l, str(tv_table.columns[i])))
         pass
         
-    def add_mean(self, name, tv_table, threshold=1,
+    def add_mean(self, name, tv_table, threshold=2,
                         color = 'black', alpha=0.8,
                         lw=4, dashes = [],
                         **kw):
@@ -419,7 +419,7 @@ class TumourVolumePlot():
         
             threshold - the minimum group size to plot at a given
                         time point.
-                        Default: 1
+                        Default: 2
         
             color    -  the color to plot this data group
                         Valid colors include matplotlib named colors
@@ -502,6 +502,10 @@ class TumourVolumePlot():
                         with individuals in columns and timepoints
                         as rows.  Individuals are removed from study
                         at the first NaN timepoint
+            
+            threshold - the minimum group size to plot a confidence
+                        interval for
+                        Default: 2
         
             ci -        the confidence interval range to plot
                         Default: 0.95
@@ -686,7 +690,7 @@ class VolumeSurvivalPlot(TumourVolumePlot):
     
     def add_mean(self, name, tv_table,
                         endpoint = 700,
-                        threshold=1,
+                        threshold=2,
                         color = 'black', alpha=0.8,
                         lw=4, dashes = [],
                         **kw):
@@ -708,7 +712,7 @@ class VolumeSurvivalPlot(TumourVolumePlot):
         
             threshold - the minimum group size to plot at a given
                         time point.
-                        Default: 1
+                        Default: 2
         
             color    -  the color to plot this data group
                         Valid colors include matplotlib named colors
