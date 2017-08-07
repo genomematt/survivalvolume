@@ -267,6 +267,8 @@ class TumourVolumePlot():
         """
         if legend == True:
             self.add_legend()
+        if legend == 'custom':
+            pass
         else:
             self.remove_legend()
         if update:
