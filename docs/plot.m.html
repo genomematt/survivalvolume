@@ -1171,7 +1171,7 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2016 Matthew Wakefield, The Walter and Eliza Hall Institute and The University of Melbourne&quot;</span>
 <span class="n">__credits__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Matthew Wakefield&quot;</span><span class="p">,]</span>
 <span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;GPLv3&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.1.0&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.2.0&quot;</span>
 <span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Matthew Wakefield&quot;</span>
 <span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;wakefield@wehi.edu.au&quot;</span>
 <span class="n">__status__</span> <span class="o">=</span> <span class="s2">&quot;production&quot;</span>
@@ -1408,6 +1408,8 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">legend</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_legend</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">legend</span> <span class="o">==</span> <span class="s1">&#39;custom&#39;</span><span class="p">:</span>
+            <span class="k">pass</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">remove_legend</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">update</span><span class="p">:</span>
@@ -1541,7 +1543,7 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
                             <span class="n">plugins</span><span class="o">.</span><span class="n">LineLabelTooltip</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">tv_table</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
         <span class="k">pass</span>
         
-    <span class="k">def</span> <span class="nf">add_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">add_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                         <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
                         <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">dashes</span> <span class="o">=</span> <span class="p">[],</span>
                         <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
@@ -1560,7 +1562,7 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
 <span class="sd">        </span>
 <span class="sd">            threshold - the minimum group size to plot at a given</span>
 <span class="sd">                        time point.</span>
-<span class="sd">                        Default: 1</span>
+<span class="sd">                        Default: 2</span>
 <span class="sd">        </span>
 <span class="sd">            color    -  the color to plot this data group</span>
 <span class="sd">                        Valid colors include matplotlib named colors</span>
@@ -1586,19 +1588,54 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
                                         <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="k">pass</span>
 
-    <span class="k">def</span> <span class="nf">add_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">_calc_t_ci</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="mf">0.95</span><span class="p">):</span>
+        <span class="n">uppers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">lowers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">means</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">tv_table</span><span class="o">.</span><span class="n">T</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">tv_table</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">entry</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+            <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="p">(</span><span class="n">lower</span><span class="p">,</span><span class="n">upper</span><span class="p">)</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">interval</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span>
+                                <span class="n">df</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                                <span class="n">loc</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span>
+                                <span class="n">scale</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span>
+                                <span class="p">)</span>
+            <span class="n">uppers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">upper</span><span class="p">)</span>
+            <span class="n">lowers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span>
+            <span class="n">means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span>
+        <span class="n">cis</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span><span class="n">means</span><span class="p">,</span>
+                              <span class="s1">&#39;lower bound&#39;</span><span class="p">:[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lowers</span><span class="p">],</span> <span class="c1">#limit to +ve</span>
+                              <span class="s1">&#39;upper bound&#39;</span><span class="p">:</span><span class="n">uppers</span><span class="p">,</span>
+            <span class="p">})</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+        <span class="n">cis</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">tv_table</span><span class="o">.</span><span class="n">index</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">cis</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">cis</span>
+    
+    
+    <span class="k">def</span> <span class="nf">_calc_norm_ci</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="mf">0.95</span><span class="p">):</span>
+        <span class="n">interval</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">interval</span><span class="p">(</span><span class="n">ci</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">tv_table</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                                               <span class="n">scale</span><span class="o">=</span><span class="n">tv_table</span><span class="o">.</span><span class="n">sem</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">cis</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span><span class="n">tv_table</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                              <span class="s1">&#39;lower bound&#39;</span><span class="p">:[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">interval</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="c1">#limit to +ve</span>
+                              <span class="s1">&#39;upper bound&#39;</span><span class="p">:</span><span class="n">interval</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="p">})</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">cis</span>
+    
+    <span class="k">def</span> <span class="nf">add_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
                         <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
                         <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dashes</span> <span class="o">=</span> <span class="p">[],</span>
                         <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Calculate the standard error of the mean and add to the plot</span>
-<span class="sd">        as a shaded band around the mean. These individuals should be a</span>
+        <span class="sd">&quot;&quot;&quot;Calculate the confidence interval of the mean and add to the </span>
+<span class="sd">        plot as a shaded band around the mean. These individuals should be a</span>
 <span class="sd">        logical group (eg treatment).</span>
 <span class="sd">        Note that the value is the confidence interval for the standard</span>
 <span class="sd">        error of the mean and indicates the range the mean is expected</span>
-<span class="sd">        to lie within.  This should not be confused with the standard</span>
-<span class="sd">        deviation of the data (the range within individual data is expected</span>
-<span class="sd">        to lie).  The standard error of the mean indicates the effect</span>
-<span class="sd">        of sampling on the mean and will decrease with increased n.</span>
+<span class="sd">        to lie within ci % of the time.</span>
+<span class="sd">        This should not be confused with the standard deviation of the data </span>
+<span class="sd">        (the range within individual data is expected to lie) or the standard</span>
+<span class="sd">        error of the mean.</span>
+<span class="sd">        As most data is expected to have a small number of observations, the</span>
+<span class="sd">        95% confidence interval is calculated using a t distribution.</span>
+<span class="sd">        Results match R&#39;s t-test and Graphpad Prism&#39;s 95% CI</span>
 <span class="sd">        </span>
 <span class="sd">        Arguments:</span>
 <span class="sd">        </span>
@@ -1608,6 +1645,10 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
 <span class="sd">                        with individuals in columns and timepoints</span>
 <span class="sd">                        as rows.  Individuals are removed from study</span>
 <span class="sd">                        at the first NaN timepoint</span>
+<span class="sd">            </span>
+<span class="sd">            threshold - the minimum group size to plot a confidence</span>
+<span class="sd">                        interval for</span>
+<span class="sd">                        Default: 2</span>
 <span class="sd">        </span>
 <span class="sd">            ci -        the confidence interval range to plot</span>
 <span class="sd">                        Default: 0.95</span>
@@ -1628,12 +1669,7 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
 <span class="sd">            **kw     -  additional key word arguments are passed to</span>
 <span class="sd">                        matplotlib.axes.fill_between</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">interval</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">interval</span><span class="p">(</span><span class="n">ci</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">tv_table</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-                                               <span class="n">scale</span><span class="o">=</span><span class="n">tv_table</span><span class="o">.</span><span class="n">sem</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">cis</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span><span class="n">tv_table</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-                              <span class="s1">&#39;lower bound&#39;</span><span class="p">:[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">interval</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="c1">#limit to +ve</span>
-                              <span class="s1">&#39;upper bound&#39;</span><span class="p">:</span><span class="n">interval</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-            <span class="p">})</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+        <span class="n">cis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_t_ci</span><span class="p">(</span><span class="n">tv_table</span><span class="p">[</span><span class="n">tv_table</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">],</span> <span class="n">ci</span><span class="o">=</span><span class="n">ci</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">intervals</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cis</span><span class="o">.</span><span class="n">index</span><span class="p">],</span>
                                                    <span class="n">cis</span><span class="p">[</span><span class="s1">&#39;lower bound&#39;</span><span class="p">],</span>
                                                    <span class="n">cis</span><span class="p">[</span><span class="s1">&#39;upper bound&#39;</span><span class="p">],</span>
@@ -1797,7 +1833,7 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
     
     <span class="k">def</span> <span class="nf">add_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span>
                         <span class="n">endpoint</span> <span class="o">=</span> <span class="mi">700</span><span class="p">,</span>
-                        <span class="n">threshold</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                         <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
                         <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">dashes</span> <span class="o">=</span> <span class="p">[],</span>
                         <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
@@ -1819,7 +1855,7 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
 <span class="sd">        </span>
 <span class="sd">            threshold - the minimum group size to plot at a given</span>
 <span class="sd">                        time point.</span>
-<span class="sd">                        Default: 1</span>
+<span class="sd">                        Default: 2</span>
 <span class="sd">        </span>
 <span class="sd">            color    -  the color to plot this data group</span>
 <span class="sd">                        Valid colors include matplotlib named colors</span>
@@ -2590,6 +2626,8 @@ name.  Static pdfs can also be generated.</p></div>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">legend</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_legend</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">legend</span> <span class="o">==</span> <span class="s1">&#39;custom&#39;</span><span class="p">:</span>
+            <span class="k">pass</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">remove_legend</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">update</span><span class="p">:</span>
@@ -2723,7 +2761,7 @@ name.  Static pdfs can also be generated.</p></div>
                             <span class="n">plugins</span><span class="o">.</span><span class="n">LineLabelTooltip</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">tv_table</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
         <span class="k">pass</span>
         
-    <span class="k">def</span> <span class="nf">add_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">add_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                         <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
                         <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">dashes</span> <span class="o">=</span> <span class="p">[],</span>
                         <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
@@ -2742,7 +2780,7 @@ name.  Static pdfs can also be generated.</p></div>
 <span class="sd">        </span>
 <span class="sd">            threshold - the minimum group size to plot at a given</span>
 <span class="sd">                        time point.</span>
-<span class="sd">                        Default: 1</span>
+<span class="sd">                        Default: 2</span>
 <span class="sd">        </span>
 <span class="sd">            color    -  the color to plot this data group</span>
 <span class="sd">                        Valid colors include matplotlib named colors</span>
@@ -2768,19 +2806,54 @@ name.  Static pdfs can also be generated.</p></div>
                                         <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="k">pass</span>
 
-    <span class="k">def</span> <span class="nf">add_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">_calc_t_ci</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="mf">0.95</span><span class="p">):</span>
+        <span class="n">uppers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">lowers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">means</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">tv_table</span><span class="o">.</span><span class="n">T</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">tv_table</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">entry</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+            <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="p">(</span><span class="n">lower</span><span class="p">,</span><span class="n">upper</span><span class="p">)</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">interval</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span>
+                                <span class="n">df</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                                <span class="n">loc</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span>
+                                <span class="n">scale</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span>
+                                <span class="p">)</span>
+            <span class="n">uppers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">upper</span><span class="p">)</span>
+            <span class="n">lowers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span>
+            <span class="n">means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span>
+        <span class="n">cis</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span><span class="n">means</span><span class="p">,</span>
+                              <span class="s1">&#39;lower bound&#39;</span><span class="p">:[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lowers</span><span class="p">],</span> <span class="c1">#limit to +ve</span>
+                              <span class="s1">&#39;upper bound&#39;</span><span class="p">:</span><span class="n">uppers</span><span class="p">,</span>
+            <span class="p">})</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+        <span class="n">cis</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">tv_table</span><span class="o">.</span><span class="n">index</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">cis</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">cis</span>
+    
+    
+    <span class="k">def</span> <span class="nf">_calc_norm_ci</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="mf">0.95</span><span class="p">):</span>
+        <span class="n">interval</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">interval</span><span class="p">(</span><span class="n">ci</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">tv_table</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                                               <span class="n">scale</span><span class="o">=</span><span class="n">tv_table</span><span class="o">.</span><span class="n">sem</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">cis</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span><span class="n">tv_table</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                              <span class="s1">&#39;lower bound&#39;</span><span class="p">:[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">interval</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="c1">#limit to +ve</span>
+                              <span class="s1">&#39;upper bound&#39;</span><span class="p">:</span><span class="n">interval</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="p">})</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">cis</span>
+    
+    <span class="k">def</span> <span class="nf">add_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
                         <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
                         <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dashes</span> <span class="o">=</span> <span class="p">[],</span>
                         <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Calculate the standard error of the mean and add to the plot</span>
-<span class="sd">        as a shaded band around the mean. These individuals should be a</span>
+        <span class="sd">&quot;&quot;&quot;Calculate the confidence interval of the mean and add to the </span>
+<span class="sd">        plot as a shaded band around the mean. These individuals should be a</span>
 <span class="sd">        logical group (eg treatment).</span>
 <span class="sd">        Note that the value is the confidence interval for the standard</span>
 <span class="sd">        error of the mean and indicates the range the mean is expected</span>
-<span class="sd">        to lie within.  This should not be confused with the standard</span>
-<span class="sd">        deviation of the data (the range within individual data is expected</span>
-<span class="sd">        to lie).  The standard error of the mean indicates the effect</span>
-<span class="sd">        of sampling on the mean and will decrease with increased n.</span>
+<span class="sd">        to lie within ci % of the time.</span>
+<span class="sd">        This should not be confused with the standard deviation of the data </span>
+<span class="sd">        (the range within individual data is expected to lie) or the standard</span>
+<span class="sd">        error of the mean.</span>
+<span class="sd">        As most data is expected to have a small number of observations, the</span>
+<span class="sd">        95% confidence interval is calculated using a t distribution.</span>
+<span class="sd">        Results match R&#39;s t-test and Graphpad Prism&#39;s 95% CI</span>
 <span class="sd">        </span>
 <span class="sd">        Arguments:</span>
 <span class="sd">        </span>
@@ -2790,6 +2863,10 @@ name.  Static pdfs can also be generated.</p></div>
 <span class="sd">                        with individuals in columns and timepoints</span>
 <span class="sd">                        as rows.  Individuals are removed from study</span>
 <span class="sd">                        at the first NaN timepoint</span>
+<span class="sd">            </span>
+<span class="sd">            threshold - the minimum group size to plot a confidence</span>
+<span class="sd">                        interval for</span>
+<span class="sd">                        Default: 2</span>
 <span class="sd">        </span>
 <span class="sd">            ci -        the confidence interval range to plot</span>
 <span class="sd">                        Default: 0.95</span>
@@ -2810,12 +2887,7 @@ name.  Static pdfs can also be generated.</p></div>
 <span class="sd">            **kw     -  additional key word arguments are passed to</span>
 <span class="sd">                        matplotlib.axes.fill_between</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">interval</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">interval</span><span class="p">(</span><span class="n">ci</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">tv_table</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-                                               <span class="n">scale</span><span class="o">=</span><span class="n">tv_table</span><span class="o">.</span><span class="n">sem</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">cis</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span><span class="n">tv_table</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-                              <span class="s1">&#39;lower bound&#39;</span><span class="p">:[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">interval</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="c1">#limit to +ve</span>
-                              <span class="s1">&#39;upper bound&#39;</span><span class="p">:</span><span class="n">interval</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-            <span class="p">})</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+        <span class="n">cis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_t_ci</span><span class="p">(</span><span class="n">tv_table</span><span class="p">[</span><span class="n">tv_table</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">],</span> <span class="n">ci</span><span class="o">=</span><span class="n">ci</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">intervals</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cis</span><span class="o">.</span><span class="n">index</span><span class="p">],</span>
                                                    <span class="n">cis</span><span class="p">[</span><span class="s1">&#39;lower bound&#39;</span><span class="p">],</span>
                                                    <span class="n">cis</span><span class="p">[</span><span class="s1">&#39;upper bound&#39;</span><span class="p">],</span>
@@ -3077,21 +3149,24 @@ dashes   -  A line dash pattern as an even length list
             
   <div class="item">
     <div class="name def" id="plot.TumourVolumePlot.add_interval">
-    <p>def <span class="ident">add_interval</span>(</p><p>self, name, tv_table, ci=0.95, color=&#39;black&#39;, alpha=0.2, lw=0, dashes=[], **kw)</p>
+    <p>def <span class="ident">add_interval</span>(</p><p>self, name, tv_table, threshold=2, ci=0.95, color=&#39;black&#39;, alpha=0.2, lw=0, dashes=[], **kw)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Calculate the standard error of the mean and add to the plot
-as a shaded band around the mean. These individuals should be a
+    <div class="desc"><p>Calculate the confidence interval of the mean and add to the 
+plot as a shaded band around the mean. These individuals should be a
 logical group (eg treatment).
 Note that the value is the confidence interval for the standard
 error of the mean and indicates the range the mean is expected
-to lie within.  This should not be confused with the standard
-deviation of the data (the range within individual data is expected
-to lie).  The standard error of the mean indicates the effect
-of sampling on the mean and will decrease with increased n.</p>
+to lie within ci % of the time.
+This should not be confused with the standard deviation of the data 
+(the range within individual data is expected to lie) or the standard
+error of the mean.
+As most data is expected to have a small number of observations, the
+95% confidence interval is calculated using a t distribution.
+Results match R's t-test and Graphpad Prism's 95% CI</p>
 <p>Arguments:</p>
 <div class="codehilite"><pre><span></span>name     -  The legend label for this group
 
@@ -3099,6 +3174,10 @@ tv_table -  a pandas data frame of volume measurements
             with individuals in columns and timepoints
             as rows.  Individuals are removed from study
             at the first NaN timepoint
+
+threshold - the minimum group size to plot a confidence
+            interval for
+            Default: 2
 
 ci -        the confidence interval range to plot
             Default: 0.95
@@ -3122,19 +3201,22 @@ dashes   -  A line dash pattern as an even length list
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-plot.TumourVolumePlot.add_interval', this);">Show source &equiv;</a></p>
   <div id="source-plot.TumourVolumePlot.add_interval" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">add_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">add_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
                     <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
                     <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dashes</span> <span class="o">=</span> <span class="p">[],</span>
                     <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Calculate the standard error of the mean and add to the plot</span>
-<span class="sd">    as a shaded band around the mean. These individuals should be a</span>
+    <span class="sd">&quot;&quot;&quot;Calculate the confidence interval of the mean and add to the </span>
+<span class="sd">    plot as a shaded band around the mean. These individuals should be a</span>
 <span class="sd">    logical group (eg treatment).</span>
 <span class="sd">    Note that the value is the confidence interval for the standard</span>
 <span class="sd">    error of the mean and indicates the range the mean is expected</span>
-<span class="sd">    to lie within.  This should not be confused with the standard</span>
-<span class="sd">    deviation of the data (the range within individual data is expected</span>
-<span class="sd">    to lie).  The standard error of the mean indicates the effect</span>
-<span class="sd">    of sampling on the mean and will decrease with increased n.</span>
+<span class="sd">    to lie within ci % of the time.</span>
+<span class="sd">    This should not be confused with the standard deviation of the data </span>
+<span class="sd">    (the range within individual data is expected to lie) or the standard</span>
+<span class="sd">    error of the mean.</span>
+<span class="sd">    As most data is expected to have a small number of observations, the</span>
+<span class="sd">    95% confidence interval is calculated using a t distribution.</span>
+<span class="sd">    Results match R&#39;s t-test and Graphpad Prism&#39;s 95% CI</span>
 <span class="sd">    </span>
 <span class="sd">    Arguments:</span>
 <span class="sd">    </span>
@@ -3144,6 +3226,10 @@ dashes   -  A line dash pattern as an even length list
 <span class="sd">                    with individuals in columns and timepoints</span>
 <span class="sd">                    as rows.  Individuals are removed from study</span>
 <span class="sd">                    at the first NaN timepoint</span>
+<span class="sd">        </span>
+<span class="sd">        threshold - the minimum group size to plot a confidence</span>
+<span class="sd">                    interval for</span>
+<span class="sd">                    Default: 2</span>
 <span class="sd">    </span>
 <span class="sd">        ci -        the confidence interval range to plot</span>
 <span class="sd">                    Default: 0.95</span>
@@ -3164,12 +3250,7 @@ dashes   -  A line dash pattern as an even length list
 <span class="sd">        **kw     -  additional key word arguments are passed to</span>
 <span class="sd">                    matplotlib.axes.fill_between</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">interval</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">interval</span><span class="p">(</span><span class="n">ci</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">tv_table</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-                                           <span class="n">scale</span><span class="o">=</span><span class="n">tv_table</span><span class="o">.</span><span class="n">sem</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-    <span class="n">cis</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span><span class="n">tv_table</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-                          <span class="s1">&#39;lower bound&#39;</span><span class="p">:[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">interval</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="c1">#limit to +ve</span>
-                          <span class="s1">&#39;upper bound&#39;</span><span class="p">:</span><span class="n">interval</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-        <span class="p">})</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+    <span class="n">cis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_t_ci</span><span class="p">(</span><span class="n">tv_table</span><span class="p">[</span><span class="n">tv_table</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">],</span> <span class="n">ci</span><span class="o">=</span><span class="n">ci</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">intervals</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cis</span><span class="o">.</span><span class="n">index</span><span class="p">],</span>
                                                <span class="n">cis</span><span class="p">[</span><span class="s1">&#39;lower bound&#39;</span><span class="p">],</span>
                                                <span class="n">cis</span><span class="p">[</span><span class="s1">&#39;upper bound&#39;</span><span class="p">],</span>
@@ -3240,7 +3321,7 @@ legends</p>
             
   <div class="item">
     <div class="name def" id="plot.TumourVolumePlot.add_mean">
-    <p>def <span class="ident">add_mean</span>(</p><p>self, name, tv_table, threshold=1, color=&#39;black&#39;, alpha=0.8, lw=4, dashes=[], **kw)</p>
+    <p>def <span class="ident">add_mean</span>(</p><p>self, name, tv_table, threshold=2, color=&#39;black&#39;, alpha=0.8, lw=4, dashes=[], **kw)</p>
     </div>
     
 
@@ -3259,7 +3340,7 @@ tv_table -  a pandas data frame of volume measurements
 
 threshold - the minimum group size to plot at a given
             time point.
-            Default: 1
+            Default: 2
 
 color    -  the color to plot this data group
             Valid colors include matplotlib named colors
@@ -3281,7 +3362,7 @@ dashes   -  A line dash pattern as an even length list
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-plot.TumourVolumePlot.add_mean', this);">Show source &equiv;</a></p>
   <div id="source-plot.TumourVolumePlot.add_mean" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">add_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">add_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                     <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
                     <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">dashes</span> <span class="o">=</span> <span class="p">[],</span>
                     <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
@@ -3300,7 +3381,7 @@ dashes   -  A line dash pattern as an even length list
 <span class="sd">    </span>
 <span class="sd">        threshold - the minimum group size to plot at a given</span>
 <span class="sd">                    time point.</span>
-<span class="sd">                    Default: 1</span>
+<span class="sd">                    Default: 2</span>
 <span class="sd">    </span>
 <span class="sd">        color    -  the color to plot this data group</span>
 <span class="sd">                    Valid colors include matplotlib named colors</span>
@@ -3385,6 +3466,8 @@ hide_volume_labels - boolean for hiding x axis volume labels
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">legend</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_legend</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">legend</span> <span class="o">==</span> <span class="s1">&#39;custom&#39;</span><span class="p">:</span>
+        <span class="k">pass</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">remove_legend</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">update</span><span class="p">:</span>
@@ -4028,7 +4111,7 @@ vertical -  Stack the Tumour Volume plot over the survival plot
     
     <span class="k">def</span> <span class="nf">add_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span>
                         <span class="n">endpoint</span> <span class="o">=</span> <span class="mi">700</span><span class="p">,</span>
-                        <span class="n">threshold</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                         <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
                         <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">dashes</span> <span class="o">=</span> <span class="p">[],</span>
                         <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
@@ -4050,7 +4133,7 @@ vertical -  Stack the Tumour Volume plot over the survival plot
 <span class="sd">        </span>
 <span class="sd">            threshold - the minimum group size to plot at a given</span>
 <span class="sd">                        time point.</span>
-<span class="sd">                        Default: 1</span>
+<span class="sd">                        Default: 2</span>
 <span class="sd">        </span>
 <span class="sd">            color    -  the color to plot this data group</span>
 <span class="sd">                        Valid colors include matplotlib named colors</span>
@@ -4436,21 +4519,24 @@ dashes   -  A line dash pattern as an even length list
             
   <div class="item">
     <div class="name def" id="plot.VolumeSurvivalPlot.add_interval">
-    <p>def <span class="ident">add_interval</span>(</p><p>self, name, tv_table, ci=0.95, color=&#39;black&#39;, alpha=0.2, lw=0, dashes=[], **kw)</p>
+    <p>def <span class="ident">add_interval</span>(</p><p>self, name, tv_table, threshold=2, ci=0.95, color=&#39;black&#39;, alpha=0.2, lw=0, dashes=[], **kw)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Calculate the standard error of the mean and add to the plot
-as a shaded band around the mean. These individuals should be a
+    <div class="desc"><p>Calculate the confidence interval of the mean and add to the 
+plot as a shaded band around the mean. These individuals should be a
 logical group (eg treatment).
 Note that the value is the confidence interval for the standard
 error of the mean and indicates the range the mean is expected
-to lie within.  This should not be confused with the standard
-deviation of the data (the range within individual data is expected
-to lie).  The standard error of the mean indicates the effect
-of sampling on the mean and will decrease with increased n.</p>
+to lie within ci % of the time.
+This should not be confused with the standard deviation of the data 
+(the range within individual data is expected to lie) or the standard
+error of the mean.
+As most data is expected to have a small number of observations, the
+95% confidence interval is calculated using a t distribution.
+Results match R's t-test and Graphpad Prism's 95% CI</p>
 <p>Arguments:</p>
 <div class="codehilite"><pre><span></span>name     -  The legend label for this group
 
@@ -4458,6 +4544,10 @@ tv_table -  a pandas data frame of volume measurements
             with individuals in columns and timepoints
             as rows.  Individuals are removed from study
             at the first NaN timepoint
+
+threshold - the minimum group size to plot a confidence
+            interval for
+            Default: 2
 
 ci -        the confidence interval range to plot
             Default: 0.95
@@ -4481,19 +4571,22 @@ dashes   -  A line dash pattern as an even length list
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-plot.VolumeSurvivalPlot.add_interval', this);">Show source &equiv;</a></p>
   <div id="source-plot.VolumeSurvivalPlot.add_interval" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">add_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">add_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
                     <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
                     <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dashes</span> <span class="o">=</span> <span class="p">[],</span>
                     <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Calculate the standard error of the mean and add to the plot</span>
-<span class="sd">    as a shaded band around the mean. These individuals should be a</span>
+    <span class="sd">&quot;&quot;&quot;Calculate the confidence interval of the mean and add to the </span>
+<span class="sd">    plot as a shaded band around the mean. These individuals should be a</span>
 <span class="sd">    logical group (eg treatment).</span>
 <span class="sd">    Note that the value is the confidence interval for the standard</span>
 <span class="sd">    error of the mean and indicates the range the mean is expected</span>
-<span class="sd">    to lie within.  This should not be confused with the standard</span>
-<span class="sd">    deviation of the data (the range within individual data is expected</span>
-<span class="sd">    to lie).  The standard error of the mean indicates the effect</span>
-<span class="sd">    of sampling on the mean and will decrease with increased n.</span>
+<span class="sd">    to lie within ci % of the time.</span>
+<span class="sd">    This should not be confused with the standard deviation of the data </span>
+<span class="sd">    (the range within individual data is expected to lie) or the standard</span>
+<span class="sd">    error of the mean.</span>
+<span class="sd">    As most data is expected to have a small number of observations, the</span>
+<span class="sd">    95% confidence interval is calculated using a t distribution.</span>
+<span class="sd">    Results match R&#39;s t-test and Graphpad Prism&#39;s 95% CI</span>
 <span class="sd">    </span>
 <span class="sd">    Arguments:</span>
 <span class="sd">    </span>
@@ -4503,6 +4596,10 @@ dashes   -  A line dash pattern as an even length list
 <span class="sd">                    with individuals in columns and timepoints</span>
 <span class="sd">                    as rows.  Individuals are removed from study</span>
 <span class="sd">                    at the first NaN timepoint</span>
+<span class="sd">        </span>
+<span class="sd">        threshold - the minimum group size to plot a confidence</span>
+<span class="sd">                    interval for</span>
+<span class="sd">                    Default: 2</span>
 <span class="sd">    </span>
 <span class="sd">        ci -        the confidence interval range to plot</span>
 <span class="sd">                    Default: 0.95</span>
@@ -4523,12 +4620,7 @@ dashes   -  A line dash pattern as an even length list
 <span class="sd">        **kw     -  additional key word arguments are passed to</span>
 <span class="sd">                    matplotlib.axes.fill_between</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">interval</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">interval</span><span class="p">(</span><span class="n">ci</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">tv_table</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-                                           <span class="n">scale</span><span class="o">=</span><span class="n">tv_table</span><span class="o">.</span><span class="n">sem</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-    <span class="n">cis</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span><span class="n">tv_table</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-                          <span class="s1">&#39;lower bound&#39;</span><span class="p">:[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">interval</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="c1">#limit to +ve</span>
-                          <span class="s1">&#39;upper bound&#39;</span><span class="p">:</span><span class="n">interval</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-        <span class="p">})</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+    <span class="n">cis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_t_ci</span><span class="p">(</span><span class="n">tv_table</span><span class="p">[</span><span class="n">tv_table</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">],</span> <span class="n">ci</span><span class="o">=</span><span class="n">ci</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">intervals</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cis</span><span class="o">.</span><span class="n">index</span><span class="p">],</span>
                                                <span class="n">cis</span><span class="p">[</span><span class="s1">&#39;lower bound&#39;</span><span class="p">],</span>
                                                <span class="n">cis</span><span class="p">[</span><span class="s1">&#39;upper bound&#39;</span><span class="p">],</span>
@@ -4697,7 +4789,7 @@ legends</p>
             
   <div class="item">
     <div class="name def" id="plot.VolumeSurvivalPlot.add_mean">
-    <p>def <span class="ident">add_mean</span>(</p><p>self, name, tv_table, endpoint=700, threshold=1, color=&#39;black&#39;, alpha=0.8, lw=4, dashes=[], **kw)</p>
+    <p>def <span class="ident">add_mean</span>(</p><p>self, name, tv_table, endpoint=700, threshold=2, color=&#39;black&#39;, alpha=0.8, lw=4, dashes=[], **kw)</p>
     </div>
     
 
@@ -4719,7 +4811,7 @@ endpoint -  the volume at which the endpoint is reached
 
 threshold - the minimum group size to plot at a given
             time point.
-            Default: 1
+            Default: 2
 
 color    -  the color to plot this data group
             Valid colors include matplotlib named colors
@@ -4745,7 +4837,7 @@ dashes   -  A line dash pattern as an even length list
   <div id="source-plot.VolumeSurvivalPlot.add_mean" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">add_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tv_table</span><span class="p">,</span>
                     <span class="n">endpoint</span> <span class="o">=</span> <span class="mi">700</span><span class="p">,</span>
-                    <span class="n">threshold</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                     <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
                     <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">dashes</span> <span class="o">=</span> <span class="p">[],</span>
                     <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
@@ -4767,7 +4859,7 @@ dashes   -  A line dash pattern as an even length list
 <span class="sd">    </span>
 <span class="sd">        threshold - the minimum group size to plot at a given</span>
 <span class="sd">                    time point.</span>
-<span class="sd">                    Default: 1</span>
+<span class="sd">                    Default: 2</span>
 <span class="sd">    </span>
 <span class="sd">        color    -  the color to plot this data group</span>
 <span class="sd">                    Valid colors include matplotlib named colors</span>
