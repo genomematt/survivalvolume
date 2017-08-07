@@ -81,7 +81,7 @@ class test_parse(unittest.TestCase):
                                [200,750,200],
                                [750,nan,300],
                                ])
-        tvp.add_mean('TestData',df)
+        tvp.add_mean('TestData',df,threshold=1)
         self.assertEqual(list(tvp.means),['TestData'])
         self.assertEqual(len(tvp.means['TestData']),1)
         self.assertEqual(repr(tvp.means['TestData'][0].get_data()),"(Int64Index([0, 1, 2], dtype='int64'), array([ 166.66666667,  383.33333333,  525.        ]))")
@@ -112,15 +112,15 @@ class test_parse(unittest.TestCase):
                                [750,nan,300],
                                ])
         df.index = [7,14,21]
-        self.assertEqual(tvp._calc_t_ci(df).index,df.index)
+        self.assertEqual(list(tvp._calc_t_ci(df).index),[7,14,21])
         self.assertEqual(tvp._calc_t_ci(df).to_dict(),
-            {'lower bound': {0: 0, 1: 0, 2: 0},
-             'mean': {0: 166.66666666666666,
-                      1: 383.33333333333331,
-                      2: 525.0},
-             'upper bound': {0: 453.51018199408497,
-                             1: 1172.1530004837336,
-                             2: 3383.8960656972213}
+            {'lower bound': {7: 0, 14: 0, 21: 0},
+             'mean': {7: 166.66666666666666,
+                      14: 383.33333333333331,
+                      21: 525.0},
+             'upper bound': {7: 453.51018199408497,
+                             14: 1172.1530004837336,
+                             21: 3383.8960656972213}
             })
         df = pandas.DataFrame([[101,99,100,102,98,100],
                                [201,199,200,202,198,200],
@@ -142,7 +142,7 @@ class test_parse(unittest.TestCase):
                                [200,750,200],
                                [750,nan,300],
                                ])
-        tvp.add_interval('TestData',df)
+        tvp.add_interval('TestData',df,threshold=1)
         self.assertEqual(list(tvp.intervals),['TestData'])
         self.assertEqual(repr(type(tvp.intervals['TestData'])),"<class 'matplotlib.collections.PolyCollection'>")
         self.assertEqual(repr(tvp.intervals['TestData'].__dict__['_paths']),"""[Path(array([[  0.00000000e+00,   4.53510182e+02],
@@ -238,7 +238,7 @@ class test_parse(unittest.TestCase):
                                [200,750,200],
                                [750,nan,300],
                                ])
-        dual.add_mean('TestData',df)
+        dual.add_mean('TestData',df,threshold=1)
         self.assertEqual(list(dual.means),['TestData'])
         self.assertEqual(len(dual.means['TestData']),1)
         self.assertEqual(repr(dual.means['TestData'][0].get_data()),"(Int64Index([0, 1, 2], dtype='int64'), array([ 166.66666667,  383.33333333,  525.        ]))")
