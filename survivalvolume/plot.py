@@ -267,7 +267,7 @@ class TumourVolumePlot():
         """
         if legend == True:
             self.add_legend()
-        if legend == 'custom':
+        elif legend == 'custom':
             pass
         else:
             self.remove_legend()
@@ -307,8 +307,10 @@ class TumourVolumePlot():
         
             **kw      - additional keyword arguments are passed to mpld3.save_html
         """
-        if legend:
+        if legend == True:
             self.add_legend()
+        elif legend == 'custom':
+            pass
         else:
             self.remove_legend()
         if not fileobj:
@@ -342,8 +344,10 @@ class TumourVolumePlot():
             **kw      - additional keyword arguments are passed to 
                         matplotlib.PdfPages.savefig
         """
-        if legend:
+        if legend == True:
             self.add_legend()
+        elif legend == 'custom':
+            pass
         else:
             self.remove_legend()
         if update:
