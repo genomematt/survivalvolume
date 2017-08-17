@@ -188,6 +188,7 @@ class TumourVolumePlot():
         self.xlim = None
         self.ylim = None
         self.fontsize = None
+        self.n_in_legend = False
         pass
     
     def remove_legend(self):
@@ -587,7 +588,14 @@ class TumourVolumePlot():
         patches = []
         for key in self.means:
             color=self.means[key][0].get_color()
-            patches.append(matplotlib.lines.Line2D([],[],color=color, label=key, lw=3))
+            if self.n_in_legend:
+                if self.lines[key]:
+                    label_text = '{0} (n={1})'.format(key,len(self.lines[key]))
+                else:
+                    label_text = '{0} (n=?)'.format(key)
+            else:
+                label_text = key
+            patches.append(matplotlib.lines.Line2D([],[],color=color, label=label_text, lw=3))
         self.ax.legend(handles=patches,
                       loc=loc,
                       **kw)
@@ -684,6 +692,7 @@ class VolumeSurvivalPlot(TumourVolumePlot):
         self.xlim = None
         self.ylim = None
         self.fontsize = None
+        self.n_in_legend = False
         pass
     
     def remove_legend(self):
