@@ -1,9 +1,12 @@
 language: python
+services:
+  - xvfb
 python:
   #- "3.3" # dependency install broken on travis container based builds
   #- "3.4"
-  - "3.5"
+  #- "3.5"
   - "3.6"
+  - "3.7"
 install:
   - pip3 install .
 before_script:
