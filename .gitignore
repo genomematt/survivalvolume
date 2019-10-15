@@ -11,3 +11,8 @@ sized6perpage.ai
 survivalvolume_github_pages
 dist/
 survivalvolume.egg-info/
+\.eggs/
+
+\.ipynb_checkpoints/
+
+build/

@@ -26,7 +26,7 @@ __author__ = "Matthew Wakefield"
 __copyright__ = "Copyright 2016 Matthew Wakefield, The Walter and Eliza Hall Institute and The University of Melbourne"
 __credits__ = ["Matthew Wakefield",]
 __license__ = "GPLv3"
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 __maintainer__ = "Matthew Wakefield"
 __email__ = "wakefield@wehi.edu.au"
 __status__ = "production"
@@ -51,16 +51,22 @@ class test_parse(unittest.TestCase):
                                [200,750,200],
                                [750,nan,300],
                                ])
-        self.assertEqual(repr(volume_to_survival(df)),"  Time Observed\n0    2     True\n1    1     True\n2    2    False")
-        self.assertEqual(repr(volume_to_survival(df, endpoint=1000)),"  Time Observed\n0    2    False\n1    1    False\n2    2    False")
+        self.assertEqual(repr(volume_to_survival(df)).replace(' ',''),
+                        "TimeObserved\n02True\n11True\n22False")
+        self.assertEqual(repr(volume_to_survival(df, endpoint=1000)).replace(' ',''),
+                        "TimeObserved\n02False\n11False\n22False")
 
     def test_make_km(self):
         df = pandas.DataFrame([[100,300,100],
                                [200,750,200],
                                [750,nan,300],
                                ])
-        self.assertEqual(repr(make_km(df)),"<lifelines.KaplanMeierFitter: fitted with 3 observations, 1 censored>")
-        self.assertEqual(repr(make_km(df, endpoint=1000)),"<lifelines.KaplanMeierFitter: fitted with 3 observations, 3 censored>")
+        try:
+            self.assertEqual(repr(make_km(df)),"<lifelines.KaplanMeierFitter: fitted with 3 total observations, 1 right-censored observations>")
+            self.assertEqual(repr(make_km(df, endpoint=1000)),"<lifelines.KaplanMeierFitter: fitted with 3 total observations, 3 right-censored observations>")
+        except:
+            self.assertEqual(repr(make_km(df)),"<lifelines.KaplanMeierFitter: fitted with 3 observations, 1 censored>")
+            self.assertEqual(repr(make_km(df, endpoint=1000)),"<lifelines.KaplanMeierFitter: fitted with 3 observations, 3 censored>")
 
     def test_TumourVolumePlot_add_individuals(self):
         tvp = TumourVolumePlot()
@@ -71,8 +77,8 @@ class test_parse(unittest.TestCase):
         tvp.add_individuals('TestData',df)
         self.assertEqual(list(tvp.lines),['TestData'])
         self.assertEqual(len(tvp.lines['TestData']),3)
-        self.assertEqual(repr(tvp.lines['TestData'][0].get_data()),"(Int64Index([0, 1, 2], dtype='int64'), array([ 100.,  200.,  750.]))")
-        self.assertEqual(repr(tvp.lines['TestData'][1].get_data()),"(Int64Index([0, 1, 2], dtype='int64'), array([ 300.,  750.,   nan]))")
+        self.assertEqual(repr(tvp.lines['TestData'][0].get_data()).replace(' ',''),"(Int64Index([0,1,2],dtype='int64'),array([100.,200.,750.]))")
+        self.assertEqual(repr(tvp.lines['TestData'][1].get_data()).replace(' ',''),"(Int64Index([0,1,2],dtype='int64'),array([300.,750.,nan]))")
         self.assertEqual(repr(type(tvp.lines['TestData'][0])),"<class 'matplotlib.lines.Line2D'>")
 
     def test_TumourVolumePlot_add_mean(self):
@@ -84,7 +90,7 @@ class test_parse(unittest.TestCase):
         tvp.add_mean('TestData',df,threshold=1)
         self.assertEqual(list(tvp.means),['TestData'])
         self.assertEqual(len(tvp.means['TestData']),1)
-        self.assertEqual(repr(tvp.means['TestData'][0].get_data()),"(Int64Index([0, 1, 2], dtype='int64'), array([ 166.66666667,  383.33333333,  525.        ]))")
+        self.assertEqual(repr(tvp.means['TestData'][0].get_data()).replace(' ',''),"(Int64Index([0,1,2],dtype='int64'),array([166.66666667,383.33333333,525.]))")
         self.assertEqual(repr(type(tvp.means['TestData'][0])),"<class 'matplotlib.lines.Line2D'>")
 
     def test_TumourVolumePlot__calc_norm_ci(self):
@@ -145,7 +151,7 @@ class test_parse(unittest.TestCase):
         tvp.add_interval('TestData',df,threshold=1)
         self.assertEqual(list(tvp.intervals),['TestData'])
         self.assertEqual(repr(type(tvp.intervals['TestData'])),"<class 'matplotlib.collections.PolyCollection'>")
-        self.assertEqual(repr(tvp.intervals['TestData'].__dict__['_paths']),"""[Path(array([[  0.00000000e+00,   4.53510182e+02],
+        self.assertEqual(repr(tvp.intervals['TestData'].__dict__['_paths']).replace(' ',''),"""[Path(array([[  0.00000000e+00,   4.53510182e+02],
        [  0.00000000e+00,   0.00000000e+00],
        [  1.00000000e+00,   0.00000000e+00],
        [  2.00000000e+00,   0.00000000e+00],
@@ -153,7 +159,7 @@ class test_parse(unittest.TestCase):
        [  2.00000000e+00,   3.38389607e+03],
        [  1.00000000e+00,   1.17215300e+03],
        [  0.00000000e+00,   4.53510182e+02],
-       [  0.00000000e+00,   4.53510182e+02]]), array([ 1,  2,  2,  2,  2,  2,  2,  2, 79], dtype=uint8))]""")
+       [  0.00000000e+00,   4.53510182e+02]]), array([ 1,  2,  2,  2,  2,  2,  2,  2, 79], dtype=uint8))]""".replace(' ',''))
 
     @unittest.expectedFailure
     def test_TumourVolumePlot_display(self):
@@ -221,12 +227,12 @@ class test_parse(unittest.TestCase):
         tvp.add_mean('TestData',df)
         tvp.add_legend()
         self.assertEqual(tvp.ax.legend_.__dict__['_visible'],True)
-        self.assertEqual(str(tvp.ax.legend_.__dict__['texts'][0]),"Text(0,0,'TestData')")
+        self.assertEqual(str(tvp.ax.legend_.__dict__['texts'][0]).replace(' ',''),"Text(0,0,'TestData')")
         tvp.add_mean('MoreData',df)
         tvp.add_legend()
         self.assertEqual(tvp.ax.legend_.__dict__['_visible'],True)
         # Result order are non deterministic in python 3.0-3.5 so we need to sort
-        self.assertEqual(sorted([str(x) for x in tvp.ax.legend_.__dict__['texts']]),["Text(0,0,'MoreData')", "Text(0,0,'TestData')"])
+        self.assertEqual(sorted([str(x).replace(' ','') for x in tvp.ax.legend_.__dict__['texts']]),["Text(0,0,'MoreData')","Text(0,0,'TestData')"])
 
     #Test only in pdf
     #def test_TumourVolumePlot_show_treatment_days(self):
@@ -241,9 +247,12 @@ class test_parse(unittest.TestCase):
         dual.add_mean('TestData',df,threshold=1)
         self.assertEqual(list(dual.means),['TestData'])
         self.assertEqual(len(dual.means['TestData']),1)
-        self.assertEqual(repr(dual.means['TestData'][0].get_data()),"(Int64Index([0, 1, 2], dtype='int64'), array([ 166.66666667,  383.33333333,  525.        ]))")
+        self.assertEqual(repr(dual.means['TestData'][0].get_data()).replace(' ',''),"(Int64Index([0,1,2],dtype='int64'),array([166.66666667,383.33333333,525.]))")
         self.assertEqual(repr(type(dual.means['TestData'][0])),"<class 'matplotlib.lines.Line2D'>")
-        self.assertEqual(repr(dual.kmfs['TestData']),"<lifelines.KaplanMeierFitter: fitted with 3 observations, 1 censored>")
+        try:
+            self.assertEqual(repr(dual.kmfs['TestData']),"<lifelines.KaplanMeierFitter: fitted with 3 total observations, 1 right-censored observations>")
+        except:
+            self.assertEqual(repr(dual.kmfs['TestData']),"<lifelines.KaplanMeierFitter: fitted with 3 observations, 1 censored>")
         print()
 
     #Tested in test_VolumeSurvivalPlot_add_mean
