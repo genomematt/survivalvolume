@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='survivalvolume',
-    version='1.2.1',
+    version='1.2.2',
     author='Matthew Wakefield',
     author_email='matthew.wakefield@unimelb.edu.au',
     install_requires = [
