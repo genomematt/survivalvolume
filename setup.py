@@ -12,7 +12,7 @@ setup(
       'matplotlib',
       'mpld3',
       'numpy',
-      'pandas',
+      'pandas>=0.25.1',
       'scipy',
       'xlrd',
     ],

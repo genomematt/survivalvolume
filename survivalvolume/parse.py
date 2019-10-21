@@ -137,7 +137,7 @@ def clean_studylog_absolute_tv(absolute_tv_df):
     return absolute_tv_df.T[3:]
 
 def studylog_absolute_to_tv_tables(xlsx_filename,
-                                   sheetname='Absolute TV',
+                                   sheetname='Absolute_TV',
                                    header_length=5): #pragma no cover
     """A function for converting study log Prism format Excel files
     to dataframes.
@@ -146,7 +146,7 @@ def studylog_absolute_to_tv_tables(xlsx_filename,
 
         xlsx_filename - a Studylog Excel Absolute TV output file
         sheetname     - the name of the sheet to extract from
-                        Default: 'Absolute TV'
+                        Default: 'Absolute_TV'
 
     Returns:
 
@@ -157,7 +157,7 @@ def studylog_absolute_to_tv_tables(xlsx_filename,
         Note: Raw days are returned - use standardise_days to fix
     """
     absolute_df = pandas.read_excel(xlsx_filename,
-                                    sheetname=sheetname,
+                                    sheet_name=sheetname,
                                     header=header_length)
     return studylog_absolute_df_to_tv_tables(absolute_df)
 
