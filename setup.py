@@ -8,13 +8,14 @@ setup(
     author_email='matthew.wakefield@unimelb.edu.au',
     install_requires = [
       'setuptools',
-      'lifelines>=0.22.8',
+      'lifelines>=0.23',
       'matplotlib',
       'mpld3',
       'numpy',
       'pandas>=0.25.1',
       'scipy',
       'xlrd',
+      'jinja2'
     ],
     packages=['survivalvolume',
               ],

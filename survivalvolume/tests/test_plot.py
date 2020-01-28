@@ -62,10 +62,10 @@ class test_parse(unittest.TestCase):
                                [750,nan,300],
                                ])
         try:
-            self.assertEqual(repr(make_km(df)),"<lifelines.KaplanMeierFitter: fitted with 3 total observations, 1 right-censored observations>")
-            self.assertEqual(repr(make_km(df, endpoint=1000)),"<lifelines.KaplanMeierFitter: fitted with 3 total observations, 3 right-censored observations>")
+            self.assertEqual(repr(make_km(df)),'<lifelines.KaplanMeierFitter:"Untitled", fitted with 3 total observations, 1 right-censored observations>')
+            self.assertEqual(repr(make_km(df, endpoint=1000)),'<lifelines.KaplanMeierFitter:"Untitled", fitted with 3 total observations, 3 right-censored observations>')
         except:
-            self.assertEqual(repr(make_km(df)),"<lifelines.KaplanMeierFitter: fitted with 3 observations, 1 censored>")
+            self.assertEqual(repr(make_km(df)),'<lifelines.KaplanMeierFitter:"Untitled", fitted with 3 total observations, 1 right-censored observations>')
             self.assertEqual(repr(make_km(df, endpoint=1000)),"<lifelines.KaplanMeierFitter: fitted with 3 observations, 3 censored>")
 
     def test_TumourVolumePlot_add_individuals(self):
@@ -77,8 +77,8 @@ class test_parse(unittest.TestCase):
         tvp.add_individuals('TestData',df)
         self.assertEqual(list(tvp.lines),['TestData'])
         self.assertEqual(len(tvp.lines['TestData']),3)
-        self.assertEqual(repr(tvp.lines['TestData'][0].get_data()).replace(' ',''),"(Int64Index([0,1,2],dtype='int64'),array([100.,200.,750.]))")
-        self.assertEqual(repr(tvp.lines['TestData'][1].get_data()).replace(' ',''),"(Int64Index([0,1,2],dtype='int64'),array([300.,750.,nan]))")
+        self.assertEqual(repr(tvp.lines['TestData'][0].get_data()).replace(' ',''),"(array([0,1,2]),array([100.,200.,750.]))")
+        self.assertEqual(repr(tvp.lines['TestData'][1].get_data()).replace(' ',''),"(array([0,1,2]),array([300.,750.,nan]))")
         self.assertEqual(repr(type(tvp.lines['TestData'][0])),"<class 'matplotlib.lines.Line2D'>")
 
     def test_TumourVolumePlot_add_mean(self):
@@ -90,7 +90,7 @@ class test_parse(unittest.TestCase):
         tvp.add_mean('TestData',df,threshold=1)
         self.assertEqual(list(tvp.means),['TestData'])
         self.assertEqual(len(tvp.means['TestData']),1)
-        self.assertEqual(repr(tvp.means['TestData'][0].get_data()).replace(' ',''),"(Int64Index([0,1,2],dtype='int64'),array([166.66666667,383.33333333,525.]))")
+        self.assertEqual(repr(tvp.means['TestData'][0].get_data()).replace(' ',''),'(array([0,1,2]),array([166.66666667,383.33333333,525.]))')
         self.assertEqual(repr(type(tvp.means['TestData'][0])),"<class 'matplotlib.lines.Line2D'>")
 
     def test_TumourVolumePlot__calc_norm_ci(self):
@@ -247,12 +247,12 @@ class test_parse(unittest.TestCase):
         dual.add_mean('TestData',df,threshold=1)
         self.assertEqual(list(dual.means),['TestData'])
         self.assertEqual(len(dual.means['TestData']),1)
-        self.assertEqual(repr(dual.means['TestData'][0].get_data()).replace(' ',''),"(Int64Index([0,1,2],dtype='int64'),array([166.66666667,383.33333333,525.]))")
+        self.assertEqual(repr(dual.means['TestData'][0].get_data()).replace(' ',''),"(array([0,1,2]),array([166.66666667,383.33333333,525.]))")
         self.assertEqual(repr(type(dual.means['TestData'][0])),"<class 'matplotlib.lines.Line2D'>")
         try:
             self.assertEqual(repr(dual.kmfs['TestData']),"<lifelines.KaplanMeierFitter: fitted with 3 total observations, 1 right-censored observations>")
         except:
-            self.assertEqual(repr(dual.kmfs['TestData']),"<lifelines.KaplanMeierFitter: fitted with 3 observations, 1 censored>")
+            self.assertEqual(repr(dual.kmfs['TestData']),'<lifelines.KaplanMeierFitter:"TestData", fitted with 3 total observations, 1 right-censored observations>')
         print()
 
     #Tested in test_VolumeSurvivalPlot_add_mean
