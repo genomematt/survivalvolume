@@ -1,14 +1,18 @@
 language: python
 services:
   - xvfb
-python:
-  #- "3.3" # dependency install broken on travis container based builds
-  #- "3.4"
-  #- "3.5"
-  - "3.6"
-  - "3.7"
-  - "3.8"
-  - "3.8-dev"
+matrix:
+  include:
+    - python: "3.6"
+    - python: "3.7"
+    - python: "3.8"
+    - python: "pypy3"
+    - python: "3.8-dev"
+    - python: "3.9-dev"  
+  allow_failures:
+    - python: "pypy3"
+    - python: "3.8-dev"
+    - python: "3.9-dev"  
 install:
   - pip3 install .
 before_script:
