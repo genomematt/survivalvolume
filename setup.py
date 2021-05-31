@@ -3,17 +3,17 @@ from setuptools import setup
 
 setup(
     name='survivalvolume',
-    version='1.2.2',
+    version='1.2.3',
     author='Matthew Wakefield',
     author_email='matthew.wakefield@unimelb.edu.au',
     install_requires = [
       'setuptools',
-      'lifelines>=0.23',
-      'matplotlib',
+      'lifelines>=0.26',
+      'matplotlib>=3.4',
       'mpld3',
       'numpy',
-      'pandas>=0.25.1',
-      'scipy',
+      'pandas>=1.2',
+      'scipy>=1.6',
       'xlrd',
       'jinja2'
     ],
