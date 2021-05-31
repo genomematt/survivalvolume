@@ -12,7 +12,7 @@ matrix:
     - python: "pypy3"
     - python: "3.9-dev"  
 install:
-  - pip3 install .
+  - pip3 install --upgrade --force .
 before_script:
   - pip3 install python-coveralls
   - pip3 install coverage
