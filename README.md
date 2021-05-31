@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/genomematt/survivalvolume.svg?branch=master)](https://travis-ci.org/genomematt/survivalvolume)
+[![Build Status](https://travis-ci.com/genomematt/survivalvolume.svg?branch=main)](https://travis-ci.org/genomematt/survivalvolume)
 [![DOI](https://zenodo.org/badge/72341202.svg)](https://zenodo.org/badge/latestdoi/72341202)
 [![JOSS](http://joss.theoj.org/papers/2876777be3db1050198a70bb6a8306a9/status.svg)](http://dx.doi.org/10.21105/joss.00111)
 [![PyPI](https://img.shields.io/pypi/v/survivalvolume.svg)](https://pypi.python.org/pypi/survivalvolume/)
@@ -16,8 +16,16 @@ Survival volume can also be applied to any other survival application where a me
 # Installation
 
 Survival volume is written for use with Python3
+Version 1.2.3 requires Python 3.7 or higher.
 
-It has dependencies on matplotlib v1.3-1.5, mpld3, lifelines, scipy, pandas, numpy and xlrd.
+It has dependencies on:
+- matplotlib >= v3.3
+- mpld3 >= 1.16.5
+- lifelines >= 0.26
+- scipy >= 1.6
+- pandas >= 1.2
+- numpy >=1.16.5
+- xlrd
 
 It is recommended that you use a pyvenv virtual environment.
 

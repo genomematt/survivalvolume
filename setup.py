@@ -6,6 +6,7 @@ setup(
     version='1.2.3',
     author='Matthew Wakefield',
     author_email='matthew.wakefield@unimelb.edu.au',
+    python_requires=">=3.7",
     install_requires = [
       'setuptools',
       'lifelines>=0.26',
