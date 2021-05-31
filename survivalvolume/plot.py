@@ -397,7 +397,7 @@ class TumourVolumePlot():
                         matplotlib.axes.plot and can be any
                         matplotlib.Line2D attributes
         """
-        self.lines[name] = self.ax.plot(tv_table.index, tv_table,
+        self.lines[name] = self.ax.plot(tv_table.index, tv_table.to_numpy(),
                                         color=color, alpha=alpha,
                                         lw=lw, dashes=dashes,
                                         **kw)
