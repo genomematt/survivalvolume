@@ -11,7 +11,7 @@ setup(
       'lifelines>=0.26',
       'matplotlib>=3.3',
       'mpld3',
-      'numpy',
+      'numpy>=1.16.5',
       'pandas>=1.2',
       'scipy>=1.6',
       'xlrd',
