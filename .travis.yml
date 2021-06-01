@@ -1,4 +1,6 @@
 language: python
+os: linux
+arch: arm64
 services:
   - xvfb
 matrix:
