@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Wakefield"
+  given-names: "Matthew"
+  orcid: "https://orcid.org/0000-0001-6624-4698"
+title: "SurvivalVolume"
+version: 1.2.3
+doi: 10.5281/zenodo.1039994
+date-released: 2021-05-31
+url: "https://github.com/genomematt/survivalvolume"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Wakefield"
+    given-names: "Matthew"
+    orcid: "https://orcid.org/0000-0001-6624-4698"
+  doi: "10.21105/joss.00111"
+  journal: "The Journal of Open Source Software"
+  month: 9
+  start: 111 # First page number
+  end: 111 # Last page number
+  title: "SurvivalVolume: interactive volume threshold survival graphs"
+  issue: 1
+  volume: 8
+  year: 2016
