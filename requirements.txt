@@ -1,0 +1,10 @@
+matplotlib>=3.3
+mpld3
+lifelines>=0.26
+scipy>=1.6
+pandas>=1.2
+numpy>=1.16.5
+ipython>=2.0
+xlrd
+openpyxl
+jinja2

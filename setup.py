@@ -3,10 +3,10 @@ from setuptools import setup
 
 setup(
     name='survivalvolume',
-    version='1.2.3',
+    version='1.2.4',
     author='Matthew Wakefield',
     author_email='matthew.wakefield@unimelb.edu.au',
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     install_requires = [
       'setuptools',
       'lifelines>=0.26',
@@ -16,6 +16,7 @@ setup(
       'pandas>=1.2',
       'scipy>=1.6',
       'xlrd',
+      'openpyxl,'
       'jinja2'
     ],
     packages=['survivalvolume',
@@ -30,10 +31,9 @@ setup(
           'Development Status :: 5 - Production/Stable',
           'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
           'Operating System :: POSIX',
-          'Programming Language :: Python :: 3.6',
-          'Programming Language :: Python :: 3.7',
           'Programming Language :: Python :: 3.8',
           'Programming Language :: Python :: 3.9',
+          'Programming Language :: Python :: 3.10',
           'Topic :: Scientific/Engineering :: Bio-Informatics',
     ],
 

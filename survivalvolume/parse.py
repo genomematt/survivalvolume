@@ -22,7 +22,7 @@ __author__ = "Matthew Wakefield"
 __copyright__ = "Copyright 2016 Matthew Wakefield, The Walter and Eliza Hall Institute and The University of Melbourne"
 __credits__ = ["Matthew Wakefield",]
 __license__ = "GPL"
-__version__ = "1.2.3"
+__version__ = "1.2.4"
 __maintainer__ = "Matthew Wakefield"
 __email__ = "wakefield@wehi.edu.au"
 __status__ = "production"
@@ -90,14 +90,14 @@ def studylog_prism_df_to_tv_tables(df):
                 tv_tables.append(cleaned)
     return dict(tv_tables)
 
-def studylog_prism_to_tv_tables(xlsx_filename, sheetname='PrismRaw'): #pragma no cover
+def studylog_prism_to_tv_tables(xlsx_filename, sheet_name='PrismRaw', sheetname=None, **kwargs): #pragma no cover
     """A function for converting study log Absolute TV format Excel files
     to dataframes.
     
     Arguments:
 
         xlsx_filename - a Studylog Excel Prism output file
-        sheetname     - the name of the sheet to extract from
+        sheet_name     - the name of the sheet to extract from
                         Default: 'PrismRaw'
 
     Returns:
@@ -107,7 +107,10 @@ def studylog_prism_to_tv_tables(xlsx_filename, sheetname='PrismRaw'): #pragma no
         data frame with columns for each individual and rows for
         volume measurements at a given time point
     """
-    df = pandas.read_excel(xlsx_filename, sheetname=sheetname, header=None)
+    if sheetname:
+        sheet_name = sheetname
+        sheet_name = sheetname
+    df = pandas.read_excel(xlsx_filename, sheet_name=sheet_name, header=None, **kwargs)
     return studylog_prism_df_to_tv_tables(df)
 
 def clean_studylog_absolute_tv(absolute_tv_df):

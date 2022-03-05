@@ -30,7 +30,7 @@ __author__ = "Matthew Wakefield"
 __copyright__ = "Copyright 2016 Matthew Wakefield, The Walter and Eliza Hall Institute and The University of Melbourne"
 __credits__ = ["Matthew Wakefield",]
 __license__ = "GPLv3"
-__version__ = "1.2.3"
+__version__ = "1.2.4"
 __maintainer__ = "Matthew Wakefield"
 __email__ = "wakefield@wehi.edu.au"
 __status__ = "production"
@@ -238,7 +238,7 @@ class TumourVolumePlot():
         to the graph axis"""
         if self.xlim or self.ylim:
             self.ax.set_xlim(self.xlim)
-            ylim = self.ylim if self.ylim else [0,1000]
+            ylim = self.ylim if self.ylim else [-2,1000] #set below zero so zero is visible
             self.ax.set_ylim(ylim)
             self.ax.set_autoscaley_on(False)
         else:
@@ -802,7 +802,7 @@ class VolumeSurvivalPlot(TumourVolumePlot):
         """
         self.kmfs[name] = make_km(tv_table, label=name, endpoint=endpoint)
         self.endpoint = endpoint
-        self.kmfs[name].plot(color = color, alpha=alpha,
+        self.kmfs[name].plot_survival_function(color = color, alpha=alpha,
                      lw=lw, dashes = dashes,
                      show_censors = self.km_show_censors,
                      ci_show = self.km_ci_show,
@@ -904,7 +904,7 @@ class VolumeSurvivalPlot(TumourVolumePlot):
         [0,1.02]"""
         if self.xlim or self.ylim:
             self.ax.set_xlim(self.xlim)
-            ylim = self.ylim if self.ylim else [0,1000]
+            ylim = self.ylim if self.ylim else [-2,1000] #set so zero is visible
             self.ax.set_ylim(ylim)
             self.ax.set_autoscaley_on(False)
             self.km_ax.set_xlim(self.xlim)
