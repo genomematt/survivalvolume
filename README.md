@@ -20,11 +20,12 @@ Version 1.2.4 requires Python 3.8 or higher.
 It has dependencies on:
 - matplotlib >= v3.3
 - mpld3 >= 1.16.5
-- lifelines >= 0.27
+- lifelines >= 0.26
 - scipy >= 1.6
 - pandas >= 1.2
 - numpy >=1.16.5
 - xlrd
+- openpyxl
 
 It is recommended that you use a pyvenv virtual environment.
 

@@ -9,7 +9,7 @@ setup(
     python_requires=">=3.8",
     install_requires = [
       'setuptools',
-      'lifelines>=0.27',
+      'lifelines>=0.26',
       'matplotlib>=3.3',
       'mpld3',
       'numpy>=1.16.5',
