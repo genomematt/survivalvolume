@@ -238,7 +238,7 @@ class TumourVolumePlot():
         to the graph axis"""
         if self.xlim or self.ylim:
             self.ax.set_xlim(self.xlim)
-            ylim = self.ylim if self.ylim else [0,1000]
+            ylim = self.ylim if self.ylim else [-2,1000] #set below zero so zero is visible
             self.ax.set_ylim(ylim)
             self.ax.set_autoscaley_on(False)
         else:
@@ -904,7 +904,7 @@ class VolumeSurvivalPlot(TumourVolumePlot):
         [0,1.02]"""
         if self.xlim or self.ylim:
             self.ax.set_xlim(self.xlim)
-            ylim = self.ylim if self.ylim else [0,1000]
+            ylim = self.ylim if self.ylim else [-2,1000] #set so zero is visible
             self.ax.set_ylim(ylim)
             self.ax.set_autoscaley_on(False)
             self.km_ax.set_xlim(self.xlim)
