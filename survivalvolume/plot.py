@@ -802,7 +802,7 @@ class VolumeSurvivalPlot(TumourVolumePlot):
         """
         self.kmfs[name] = make_km(tv_table, label=name, endpoint=endpoint)
         self.endpoint = endpoint
-        self.kmfs[name].plot(color = color, alpha=alpha,
+        self.kmfs[name].plot_survival_function(color = color, alpha=alpha,
                      lw=lw, dashes = dashes,
                      show_censors = self.km_show_censors,
                      ci_show = self.km_ci_show,
