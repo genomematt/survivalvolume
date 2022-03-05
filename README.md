@@ -16,12 +16,12 @@ Survival volume can also be applied to any other survival application where a me
 # Installation
 
 Survival volume is written for use with Python3
-Version 1.2.3 requires Python 3.7 or higher.
+Version 1.2.4 requires Python 3.8 or higher.
 
 It has dependencies on:
 - matplotlib >= v3.3
 - mpld3 >= 1.16.5
-- lifelines >= 0.26
+- lifelines >= 0.27
 - scipy >= 1.6
 - pandas >= 1.2
 - numpy >=1.16.5
