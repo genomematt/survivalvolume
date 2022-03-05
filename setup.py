@@ -9,13 +9,14 @@ setup(
     python_requires=">=3.8",
     install_requires = [
       'setuptools',
-      'lifelines>=0.26',
+      'lifelines>=0.27',
       'matplotlib>=3.3',
       'mpld3',
       'numpy>=1.16.5',
       'pandas>=1.2',
       'scipy>=1.6',
       'xlrd',
+      'openpyxl,'
       'jinja2'
     ],
     packages=['survivalvolume',
