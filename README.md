@@ -60,6 +60,8 @@ To look at the graphics you can either download the html version and open in you
 Survivalvolume is licensed under the GPLv3.  You are free to fork this repository under the terms of that license.  If you have suggested changes please start by raising an issue in the issue tracker.  Pull requests are welcome and will be included at the discretion of the author.
 Bug reports should be made to the issue tracker.  Difficulty in understanding how to use the software is a documentation bug, and should also be raised on the issue tracker with the tag `question` so your question and my response are easily found by others.
 
+Survivalvolume aims to maintain a respectful and inclusive community and adopts the
+[contributor covenant v2.1](code_of_conduct.md)
 
 # Citing survivalvolume
 
