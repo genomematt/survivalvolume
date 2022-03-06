@@ -16,7 +16,7 @@ setup(
       'pandas>=1.2',
       'scipy>=1.6',
       'xlrd',
-      'openpyxl,'
+      'openpyxl',
       'jinja2'
     ],
     packages=['survivalvolume',
