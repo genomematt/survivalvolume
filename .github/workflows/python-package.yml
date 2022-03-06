@@ -8,6 +8,10 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  schedule:
+    # monthly check that everything still works with dependencies
+    - cron: '13 13 13 * *'
+
 
 jobs:
   build:
