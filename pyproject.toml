@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "survivalvolume"
+version = "1.2.4"
+description = "Plotting tools for survival data"
+authors = ["Matthew Wakefield <matthew.wakefield@wehi.edu.au>"]
+license = "GPLv3"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+lifelines = "^0.26"
+matplotlib = "^3.3"
+mpld3 = "^0.5.7"
+numpy = "^1.16.5"
+pandas = "^1.2"
+scipy = "^1.6"
+xlrd = "^2.0.1"
+openpyxl = "^3.0.9"
+Jinja2 = "^3.0.3"
+ipython = "^2.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
