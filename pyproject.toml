@@ -16,7 +16,7 @@ scipy = "^1.6"
 xlrd = "^2.0.1"
 openpyxl = "^3.0.9"
 Jinja2 = "^3.0.3"
-ipython = "^2.0"
+ipython = "^5.11"
 
 [tool.poetry.dev-dependencies]
 
