@@ -98,6 +98,9 @@ def volume_to_survival(tv_data, endpoint=700):
                         for x in tv_data if tv_data[x].any()}
                         ).T
     survival.columns=['Time','Observed']
+    survival['Time'] = pandas.to_numeric(survival['Time'], errors='coerce')
+    survival['Observed'] = survival['Observed'].astype(bool)
+
     return survival
 
 def make_km(tv_data, label='Untitled',endpoint=700):
