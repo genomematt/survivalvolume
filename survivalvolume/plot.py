@@ -192,6 +192,21 @@ class TumourVolumePlot():
         self.ylim = None
         self.fontsize = None
         self.n_in_legend = False
+
+        self.line_labels = {}
+        self.original_styles = {}
+
+        # Create an invisible annotation to act as a tooltip
+        self.tooltip = self.ax.annotate(
+            "", xy=(0, 0), xytext=(10, 10),
+            textcoords="offset points",
+            bbox=dict(boxstyle="round", fc="white", alpha=0.9),
+            arrowprops=dict(arrowstyle="->")
+        )
+        self.tooltip.set_visible(False)
+
+        # Connect the motion/hover event
+        self.fig.canvas.mpl_connect("motion_notify_event", self._on_hover)
         pass
     
     def remove_legend(self):
@@ -406,8 +421,16 @@ class TumourVolumePlot():
                                         **kw)
         plugins.connect(self.fig, HighlightLines(self.lines[name]))
         for i, l in enumerate(self.lines[name]):
-            plugins.connect(self.fig,
-                            plugins.LineLabelTooltip(l, str(tv_table.columns[i])))
+            label_str = str(tv_table.columns[i])
+
+            plugins.connect(self.fig, plugins.LineLabelTooltip(l, label_str))
+
+            self.line_labels[l] = label_str
+            self.original_styles[l] = {
+                'alpha': alpha,
+                'lw': lw,
+                'color': l.get_color()
+            }
         pass
         
     def add_mean(self, name, tv_table, threshold=2,
@@ -654,6 +677,37 @@ class TumourVolumePlot():
         self.ax.add_patch(matplotlib.patches.Rectangle((start, min(miny,self.ylim[0])), end, max(maxy,self.ylim[1]),
                                                         facecolor="lightgrey",alpha=alpha, lw=0, **kw))
         pass
+    def _on_hover(self, event):
+        # Only trigger if the event happens inside the plotting axes
+        if event.inaxes != self.ax:
+            return
+
+        is_any_hovered = False
+
+        for name, lines in self.lines.items():
+            for line in lines:
+                cont, ind = line.contains(event)
+                if cont:
+                    # Highlight the targeted line
+                    line.set_alpha(1.0)
+                    line.set_linewidth(self.original_styles[line]['lw'] + 1.5)
+
+                    # Update the tooltip text and position
+                    self.tooltip.xy = (event.xdata, event.ydata)
+                    self.tooltip.set_text(self.line_labels[line])
+                    self.tooltip.set_visible(True)
+                    is_any_hovered = True
+                else:
+                    # Revert to background style
+                    line.set_alpha(self.original_styles[line]['alpha'])
+                    line.set_linewidth(self.original_styles[line]['lw'])
+
+        # If the mouse leaves all lines, hide the tooltip
+        if not is_any_hovered:
+            self.tooltip.set_visible(False)
+
+        # Redraw the canvas cleanly
+        self.fig.canvas.draw_idle()
     
 
 class VolumeSurvivalPlot(TumourVolumePlot):
@@ -677,6 +731,9 @@ class VolumeSurvivalPlot(TumourVolumePlot):
         else:
             self.fig, (self.ax, self.km_ax) = plt.subplots(nrows=1, ncols=2, gridspec_kw={'width_ratios':[1,km_size]},**kw)
         self.lines = {}
+        self.means = {}
+        self.line_labels = {}
+        self.original_styles = {}
         self.means = {}
         self.kmfs = {}
         self.intervals = {}
