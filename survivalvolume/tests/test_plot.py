@@ -17,6 +17,7 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
 
 import sys, io, os, unittest
 import pandas
+from pandas import testing as tm
 from numpy import nan
 from survivalvolume.tests.test_data import test_data
 from survivalvolume.plot import *
@@ -110,37 +111,46 @@ class test_parse(unittest.TestCase):
                              1: 742.66006383234321,
                              2: 965.99189652151222}
              })
-    
+
     def test_TumourVolumePlot__calc_t_ci(self):
         tvp = TumourVolumePlot()
-        df = pandas.DataFrame([[100,300,100],
-                               [200,750,200],
-                               [750,nan,300],
-                               ])
-        df.index = [7,14,21]
-        self.assertEqual(list(tvp._calc_t_ci(df).index),[7,14,21])
-        self.assertEqual(tvp._calc_t_ci(df).to_dict(),
-            {'lower bound': {7: 0, 14: 0, 21: 0},
-             'mean': {7: 166.66666666666666,
-                      14: 383.33333333333331,
-                      21: 525.0},
-             'upper bound': {7: 453.51018199408497,
-                             14: 1172.1530004837336,
-                             21: 3383.8960656972213}
-            })
-        df = pandas.DataFrame([[101,99,100,102,98,100],
-                               [201,199,200,202,198,200],
-                               [501,499,500,502,498,500],
-                               ])
-        self.assertEqual(tvp._calc_t_ci(df).to_dict(),
-            {'lower bound': {0: 98.515873884656514,
-                             1: 198.51587388465651,
-                             2: 498.51587388465651},
-             'mean': {0: 100.0, 1: 200.0, 2: 500.0},
-             'upper bound': {0: 101.48412611534349,
-                             1: 201.48412611534349,
-                             2: 501.48412611534349}
-            })
+
+        # Test Case 1: Small sample with NaNs
+        df = pandas.DataFrame([
+            [100, 300, 100],
+            [200, 750, 200],
+            [750, np.nan, 300],
+        ], index=[7, 14, 21])
+
+        result = tvp._calc_t_ci(df)
+
+        # Define expected values (truncated slightly for readability)
+        expected_data = {
+            'lower bound': {7: 0.0, 14: 0.0, 21: 0.0},
+            'mean': {7: 166.66666666666666, 14: 383.3333333333333, 21: 525.0},
+            'upper bound': {7: 453.51018199, 14: 1172.15300048, 21: 3383.8960657}
+        }
+        expected_df = pandas.DataFrame(expected_data)
+
+        # rtol=1e-5 handles the float precision shift between x86 and aarch64
+        tm.assert_frame_equal(result, expected_df, atol=1e-5, rtol=1e-5, check_dtype=False, check_like=True)
+
+        # Test Case 2: Uniform distribution
+        df2 = pandas.DataFrame([
+            [101, 99, 100, 102, 98, 100],
+            [201, 199, 200, 202, 198, 200],
+            [501, 499, 500, 502, 498, 500],
+        ])
+
+        result2 = tvp._calc_t_ci(df2)
+        expected_data2 = {
+            'lower bound': {0: 98.515873, 1: 198.515873, 2: 498.515873},
+            'mean': {0: 100.0, 1: 200.0, 2: 500.0},
+            'upper bound': {0: 101.484126, 1: 201.484126, 2: 501.484126}
+        }
+        expected_df2 = pandas.DataFrame(expected_data2)
+
+        tm.assert_frame_equal(result2, expected_df2, atol=1e-5, rtol=1e-5, check_dtype=False, check_like=True)
 
     def test_TumourVolumePlot_add_interval(self):
         tvp = TumourVolumePlot()
@@ -150,7 +160,7 @@ class test_parse(unittest.TestCase):
                                ])
         tvp.add_interval('TestData',df,threshold=1)
         self.assertEqual(list(tvp.intervals),['TestData'])
-        self.assertEqual(repr(type(tvp.intervals['TestData'])),"<class 'matplotlib.collections.PolyCollection'>")
+        self.assertEqual(repr(type(tvp.intervals['TestData'])),"<class 'matplotlib.collections.FillBetweenPolyCollection'>")
         self.assertEqual(repr(tvp.intervals['TestData'].__dict__['_paths']).replace(' ',''),"""[Path(array([[  0.00000000e+00,   4.53510182e+02],
        [  0.00000000e+00,   0.00000000e+00],
        [  1.00000000e+00,   0.00000000e+00],
