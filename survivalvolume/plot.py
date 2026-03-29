@@ -25,6 +25,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats
 from mpld3 import plugins, utils
+import plotly.graph_objects as go
 
 __author__ = "Matthew Wakefield"
 __copyright__ = "Copyright 2016 Matthew Wakefield, The Walter and Eliza Hall Institute and The University of Melbourne"
@@ -677,6 +678,35 @@ class TumourVolumePlot():
         self.ax.add_patch(matplotlib.patches.Rectangle((start, min(miny,self.ylim[0])), end, max(maxy,self.ylim[1]),
                                                         facecolor="lightgrey",alpha=alpha, lw=0, **kw))
         pass
+
+    def export_to_plotly(self):
+        fig = go.Figure()
+
+        # Iterate through the lines we stored in our class
+        for name, lines in self.lines.items():
+            for i, line in enumerate(lines):
+                # Extract data directly from the Matplotlib line object
+                x = line.get_xdata()
+                y = line.get_ydata()
+                label = self.line_labels.get(line, name)
+
+                fig.add_trace(go.Scatter(
+                    x=x, y=y,
+                    mode='lines',
+                    name=label,
+                    line=dict(width=2),
+                    hovertemplate=f"Day: %{{x}}<br>Volume: %{{y}}<br>ID: {label}<extra></extra>"
+                ))
+
+        fig.update_layout(
+            title=self.title,
+            xaxis_title=self.xlabel,
+            yaxis_title=self.ylabel,
+            hovermode='closest'
+        )
+
+        return fig
+
     def _on_hover(self, event):
         # Only trigger if the event happens inside the plotting axes
         if event.inaxes != self.ax:
