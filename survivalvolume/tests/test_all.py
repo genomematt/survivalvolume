@@ -18,13 +18,13 @@ Copyright (c) 2016  Matthew Wakefield, The Walter and Eliza Hall Institute and T
 import unittest
 from survivalvolume.tests.test_parse import *
 from survivalvolume.tests.test_plot import *
+from survivalvolume.tests.test_plot import *
 
 __author__ = "Matthew Wakefield"
-__copyright__ = "Copyright 2011-2016 Matthew Wakefield, The Walter and Eliza Hall Institute and The University of Melbourne"
+__copyright__ = "Copyright 2011-2026 Matthew Wakefield, The Walter and Eliza Hall Institute and The University of Melbourne"
 __credits__ = ["Matthew Wakefield",]
 __license__ = "GPLv3"
-__version__ = "1.2.4"
-__version__ = "1.2.4"
+__version__ = "2.0.0b1"
 __maintainer__ = "Matthew Wakefield"
 __email__ = "wakefield@wehi.edu.au"
 __status__ = "Production"
